@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+
+{% block title %}Faculty | CSE Department{% endblock %}
+
+{% block content %}
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+    <div class="mb-10">
+        <h1 class="text-3xl font-extrabold text-gray-900">Department Faculty</h1>
+        <p class="mt-2 text-lg text-gray-600">Meet the educators and researchers driving our curriculum.</p>
+    </div>
+
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        {% for member in faculty %}
+        <div class="bg-white overflow-hidden shadow-sm rounded-lg border border-gray-200 p-6">
+            <h3 class="text-xl font-bold text-gray-900">{{ member.name }}</h3>
+            <p class="text-sm font-medium text-cseAccent mb-4">{{ member.designation }}</p>
+            <div class="text-sm text-gray-600 space-y-2">
+                <p><strong>Specialization:</strong> {{ member.specialization }}</p>
+                <p><strong>Email:</strong> <a href="mailto:{{ member.email }}" class="text-blue-500 hover:underline">{{ member.email }}</a></p>
+            </div>
+        </div>
+        {% else %}
+        <p class="text-gray-500 italic col-span-full">Faculty profiles are currently being updated.</p>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

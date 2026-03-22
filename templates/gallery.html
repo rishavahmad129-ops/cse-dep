@@ -1,0 +1,34 @@
+{% extends 'base.html' %}
+
+{% block title %}Gallery | CSE Department{% endblock %}
+
+{% block content %}
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+    <div class="text-center mb-10">
+        <h1 class="text-4xl font-extrabold text-gray-900 mb-4">Department Gallery</h1>
+        <p class="text-lg text-gray-600">Explore photos and videos from our recent events, workshops, and campus life.</p>
+    </div>
+
+    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8">
+        {% for item in items %}
+        <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden hover:shadow-md transition-shadow duration-300">
+            
+            {% if item.media_type == 'image' %}
+                <img src="{{ url_for('static', filename='uploads/' + item.file_path) }}" alt="{{ item.title }}" class="w-full h-64 object-cover">
+            {% elif item.media_type == 'video' %}
+                <iframe class="w-full h-64" src="{{ item.file_path }}" title="{{ item.title }}" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+            {% endif %}
+            
+            <div class="p-4 bg-gray-50 border-t border-gray-100">
+                <h3 class="font-bold text-gray-900">{{ item.title }}</h3>
+                <p class="text-xs text-gray-500 mt-1">{{ item.date_added.strftime('%B %d, %Y') }}</p>
+            </div>
+        </div>
+        {% else %}
+        <div class="col-span-full text-center py-12 text-gray-500">
+            <p>The gallery is currently empty. Check back soon for updates!</p>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

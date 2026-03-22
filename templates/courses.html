@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+
+{% block title %}Courses & Syllabus | CSE Department{% endblock %}
+
+{% block content %}
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+    <div class="mb-10 text-center">
+        <h1 class="text-3xl font-extrabold text-gray-900">Academic Courses</h1>
+        <p class="mt-2 text-lg text-gray-600">Explore the core and elective subjects offered in our program.</p>
+    </div>
+
+    <div class="bg-white shadow-sm rounded-lg border border-gray-200 overflow-hidden">
+        <table class="min-w-full divide-y divide-gray-200">
+            <thead class="bg-gray-50">
+                <tr>
+    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Semester</th>
+    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Course Code</th>
+    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Title</th>
+    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Credits</th>
+    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Course Instructor</th>
+</tr>
+
+{% for course in courses %}
+<tr class="hover:bg-gray-50">
+    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700 font-bold">{{ course.semester }}</td>
+    <td class="px-6 py-4 whitespace-nowrap text-sm text-blue-600 font-mono font-bold">{{ course.course_code }}</td>
+    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ course.title }}</td>
+    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">{{ course.credits }}</td>
+    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">
+        {% if course.professor %}
+            {{ course.professor.name }}
+        {% else %}
+            <span class="text-gray-400 italic">To Be Announced</span>
+        {% endif %}
+    </td>
+</tr>
+{% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}
