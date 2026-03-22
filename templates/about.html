@@ -1,44 +1,106 @@
 {% extends 'base.html' %}
 
-{% block title %}About Us | CSE Department{% endblock %}
+{% block title %}About Us | CSE - New Government Polytechnic{% endblock %}
 
 {% block content %}
-<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+<div class="bg-gradient-to-r from-blue-900 to-indigo-800 py-16 sm:py-20 relative overflow-hidden">
+    <div class="absolute inset-0 opacity-10" style="background-image: radial-gradient(#fff 1px, transparent 1px); background-size: 20px 20px;"></div>
     
-    <div class="mb-16">
-        <h1 class="text-4xl font-extrabold text-gray-900 mb-6 border-b pb-4">About the Department</h1>
-        <p class="text-lg text-gray-700 leading-relaxed whitespace-pre-line">{{ info.about_text }}</p>
+    <div class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+        <span class="text-blue-300 font-bold tracking-widest uppercase text-sm mb-2 block">New Government Polytechnic</span>
+        <h1 class="text-4xl sm:text-5xl font-extrabold text-white tracking-tight drop-shadow-md">About the Department</h1>
+        <p class="mt-4 text-xl text-blue-100 max-w-2xl mx-auto font-light">
+            Empowering the next generation of software engineers through innovation, research, and technical excellence.
+        </p>
     </div>
+</div>
 
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-16">
-        <div class="bg-blue-50 p-8 rounded-xl shadow-sm border border-blue-100">
-            <h2 class="text-2xl font-bold text-blue-900 mb-4 flex items-center">
-                <svg class="w-6 h-6 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path></svg>
-                Our Vision
-            </h2>
-            <p class="text-gray-700 whitespace-pre-line">{{ info.vision }}</p>
-        </div>
-        <div class="bg-green-50 p-8 rounded-xl shadow-sm border border-green-100">
-            <h2 class="text-2xl font-bold text-green-900 mb-4 flex items-center">
-                <svg class="w-6 h-6 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
-                Our Mission
-            </h2>
-            <p class="text-gray-700 whitespace-pre-line">{{ info.mission }}</p>
-        </div>
-    </div>
-
-    <div class="bg-white p-8 rounded-xl shadow-sm border border-gray-200 flex flex-col md:flex-row gap-8 items-start">
-        <div class="w-full md:w-1/3 bg-gray-100 rounded-lg h-64 flex items-center justify-center text-gray-400">
-            <svg class="w-20 h-20" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd"></path></svg>
-        </div>
-        <div class="w-full md:w-2/3">
-            <h2 class="text-3xl font-bold text-gray-900 mb-2">Message from the HOD</h2>
-            <h3 class="text-xl text-cseAccent font-medium mb-6">{{ info.hod_name }}</h3>
-            <blockquote class="text-gray-600 italic border-l-4 border-gray-300 pl-4 whitespace-pre-line">
-                "{{ info.hod_message }}"
-            </blockquote>
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-20">
+    
+    <div class="bg-white rounded-2xl shadow-xl border border-gray-100 p-8 sm:p-12 mb-16 transform transition-all duration-300 hover:shadow-2xl relative overflow-hidden">
+        <div class="absolute top-0 left-0 w-2 h-full bg-blue-600"></div>
+        
+        <h2 class="text-3xl font-extrabold text-gray-900 mb-6 tracking-tight">Department Overview</h2>
+        <div class="prose prose-lg prose-blue max-w-none text-gray-600 leading-relaxed whitespace-pre-line">
+            {{ info.about_text or 'Information about the department will be updated soon.' }}
         </div>
     </div>
 
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-20">
+        <div class="bg-gradient-to-br from-blue-50 to-white p-8 sm:p-10 rounded-2xl shadow-lg border border-blue-100 transform transition-transform duration-300 hover:-translate-y-2 hover:shadow-xl group">
+            <div class="w-14 h-14 bg-blue-600 rounded-xl flex items-center justify-center text-white mb-6 shadow-md group-hover:scale-110 transition-transform duration-300">
+                <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path></svg>
+            </div>
+            <h2 class="text-2xl font-bold text-blue-900 mb-4">Our Vision</h2>
+            <p class="text-gray-600 leading-relaxed whitespace-pre-line">{{ info.vision or 'Vision statement pending.' }}</p>
+        </div>
+
+        <div class="bg-gradient-to-br from-green-50 to-white p-8 sm:p-10 rounded-2xl shadow-lg border border-green-100 transform transition-transform duration-300 hover:-translate-y-2 hover:shadow-xl group">
+            <div class="w-14 h-14 bg-green-600 rounded-xl flex items-center justify-center text-white mb-6 shadow-md group-hover:scale-110 transition-transform duration-300">
+                <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
+            </div>
+            <h2 class="text-2xl font-bold text-green-900 mb-4">Our Mission</h2>
+            <p class="text-gray-600 leading-relaxed whitespace-pre-line">{{ info.mission or 'Mission statement pending.' }}</p>
+        </div>
+    </div>
+
+    <div class="text-center mb-12">
+        <h2 class="text-base text-blue-600 font-bold tracking-wider uppercase">Leadership</h2>
+        <p class="mt-2 text-3xl leading-8 font-extrabold tracking-tight text-gray-900 sm:text-4xl">Messages from the Desk</p>
+        <div class="w-24 h-1 bg-blue-600 mx-auto mt-6 rounded-full"></div>
+    </div>
+
+    <div class="space-y-12">
+        
+        <div class="bg-white p-8 sm:p-10 rounded-2xl shadow-xl border border-gray-100 flex flex-col md:flex-row gap-8 items-center md:items-start transition duration-300 hover:shadow-2xl">
+            <div class="w-48 h-48 sm:w-56 sm:h-56 flex-shrink-0 relative">
+                <div class="absolute inset-0 bg-blue-100 rounded-full transform translate-x-2 translate-y-2"></div>
+                {% if info.principal_image %}
+                    <img src="{{ url_for('static', filename='uploads/' + info.principal_image) }}" alt="Principal" class="w-full h-full object-cover rounded-full border-4 border-white shadow-lg relative z-10">
+                {% else %}
+                    <div class="w-full h-full bg-gray-100 rounded-full border-4 border-white shadow-lg relative z-10 flex flex-col items-center justify-center text-gray-400">
+                        <svg class="w-16 h-16 mb-2" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd"></path></svg>
+                        <span class="text-xs uppercase font-semibold">Photo Pending</span>
+                    </div>
+                {% endif %}
+            </div>
+            
+            <div class="flex-grow text-center md:text-left mt-4 md:mt-0">
+                <h2 class="text-3xl font-extrabold text-gray-900 mb-1">{{ info.principal_name or 'Principal Name' }}</h2>
+                <h3 class="text-sm font-bold tracking-widest text-blue-600 uppercase mb-6">Principal, New Government Polytechnic</h3>
+                <div class="relative">
+                    <svg class="absolute top-0 left-0 transform -translate-x-6 -translate-y-4 w-12 h-12 text-blue-100 opacity-50" fill="currentColor" viewBox="0 0 32 32"><path d="M9.352 4C4.456 7.456 1 13.12 1 19.36c0 5.088 3.072 8.064 6.624 8.064 3.36 0 5.856-2.688 5.856-5.856 0-3.168-2.208-5.472-5.088-5.472-.576 0-1.344.096-1.536.192.48-3.264 3.552-7.104 6.624-9.024L9.352 4zm16.512 0c-4.896 3.456-8.352 9.12-8.352 15.36 0 5.088 3.072 8.064 6.624 8.064 3.264 0 5.856-2.688 5.856-5.856 0-3.168-2.304-5.472-5.184-5.472-.576 0-1.248.096-1.44.192.48-3.264 3.456-7.104 6.528-9.024L25.864 4z"/></svg>
+                    <blockquote class="text-gray-700 italic text-lg leading-relaxed relative z-10 whitespace-pre-line">
+                        {{ info.principal_message or 'The Principal\'s message will be updated soon.' }}
+                    </blockquote>
+                </div>
+            </div>
+        </div>
+
+        <div class="bg-white p-8 sm:p-10 rounded-2xl shadow-xl border border-gray-100 flex flex-col md:flex-row-reverse gap-8 items-center md:items-start transition duration-300 hover:shadow-2xl">
+            <div class="w-48 h-48 sm:w-56 sm:h-56 flex-shrink-0 relative">
+                <div class="absolute inset-0 bg-blue-100 rounded-full transform -translate-x-2 translate-y-2"></div>
+                {% if info.hod_image %}
+                    <img src="{{ url_for('static', filename='uploads/' + info.hod_image) }}" alt="HOD" class="w-full h-full object-cover rounded-full border-4 border-white shadow-lg relative z-10">
+                {% else %}
+                    <div class="w-full h-full bg-gray-100 rounded-full border-4 border-white shadow-lg relative z-10 flex flex-col items-center justify-center text-gray-400">
+                        <svg class="w-16 h-16 mb-2" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd"></path></svg>
+                        <span class="text-xs uppercase font-semibold">Photo Pending</span>
+                    </div>
+                {% endif %}
+            </div>
+            
+            <div class="flex-grow text-center md:text-right mt-4 md:mt-0">
+                <h2 class="text-3xl font-extrabold text-gray-900 mb-1">{{ info.hod_name or 'HOD Name' }}</h2>
+                <h3 class="text-sm font-bold tracking-widest text-blue-600 uppercase mb-6">Head of CSE Department</h3>
+                <div class="relative inline-block text-left md:text-right">
+                    <blockquote class="text-gray-700 italic text-lg leading-relaxed relative z-10 whitespace-pre-line">
+                        {{ info.hod_message or 'The HOD\'s message will be updated soon.' }}
+                    </blockquote>
+                </div>
+            </div>
+        </div>
+
+    </div>
 </div>
 {% endblock %}

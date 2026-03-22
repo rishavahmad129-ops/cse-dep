@@ -14,7 +14,7 @@ class Faculty(db.Model):
     designation = db.Column(db.String(100), nullable=False)
     email = db.Column(db.String(120), unique=True, nullable=False)
     specialization = db.Column(db.String(200))
-
+    image_path = db.Column(db.String(255), nullable=True)
 
 
 class Notice(db.Model):
@@ -45,14 +45,19 @@ class DepartmentInfo(db.Model):
     vision = db.Column(db.Text, default="To be a center of excellence in computer science education and research.")
     mission = db.Column(db.Text, default="To produce globally competent and socially responsible computer engineers.")
     
-    # HOD Details
-    hod_name = db.Column(db.String(100), default="Head of Department")
-    hod_message = db.Column(db.Text, default="Welcome to our dynamic learning community.")
+    # Updated HOD Details
+    hod_name = db.Column(db.String(100), nullable=True)
+    hod_message = db.Column(db.Text, nullable=True)
+    hod_image = db.Column(db.String(255), nullable=True) # NEW
     
-    # Contact Details
-    contact_email = db.Column(db.String(120), default="amansingh07king@gmail.com")
-    contact_phone = db.Column(db.String(20), default="+91 6207188317")
-    address = db.Column(db.Text, default="CSE Department\nMain Campus Building, Block A\nCity, State, ZIP") 
+    # NEW: Principal Details
+    principal_name = db.Column(db.String(100), nullable=True)
+    principal_message = db.Column(db.Text, nullable=True)
+    principal_image = db.Column(db.String(255), nullable=True)
+    
+    contact_email = db.Column(db.String(120), nullable=True)
+    contact_phone = db.Column(db.String(20), nullable=True)
+    address = db.Column(db.Text, nullable=True) 
 
 
 class Gallery(db.Model):

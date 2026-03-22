@@ -109,11 +109,55 @@ def update_settings():
     info.mission = request.form.get('mission')
     info.hod_name = request.form.get('hod_name')
     info.hod_message = request.form.get('hod_message')
+    info.principal_name = request.form.get('principal_name')
+    info.principal_message = request.form.get('principal_message')
     info.contact_email = request.form.get('contact_email')
     info.contact_phone = request.form.get('contact_phone')
     info.address = request.form.get('address')
     
+    # Handle HOD Image Upload
+    hod_file = request.files.get('hod_image')
+    if hod_file and allowed_file(hod_file.filename):
+        filename = secure_filename(hod_file.filename)
+        hod_file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+        info.hod_image = filename
+
+    # Handle Principal Image Upload
+    prin_file = request.files.get('principal_image')
+    if prin_file and allowed_file(prin_file.filename):
+        filename = secure_filename(prin_file.filename)
+        prin_file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+        info.principal_image = filename
+        
     db.session.commit()
+    return redirect(url_for('admin_dashboard'))
+
+@app.route('/admin/faculty/add', methods=['POST'])
+@login_required
+def add_faculty():
+    name = request.form.get('name')
+    designation = request.form.get('designation')
+    email = request.form.get('email')
+    specialization = request.form.get('specialization')
+    
+    # Handle Faculty Image Upload
+    image_path = None
+    file = request.files.get('image')
+    if file and allowed_file(file.filename):
+        image_path = secure_filename(file.filename)
+        file.save(os.path.join(app.config['UPLOAD_FOLDER'], image_path))
+    
+    if name and email:
+        new_faculty = Faculty(
+            name=name, 
+            designation=designation, 
+            email=email, 
+            specialization=specialization,
+            image_path=image_path
+        )
+        db.session.add(new_faculty)
+        db.session.commit()
+        
     return redirect(url_for('admin_dashboard'))
 
 
@@ -225,25 +269,7 @@ def delete_course(id):
     return redirect(url_for('admin_dashboard'))
 
 # --- Admin Faculty Routes ---
-@app.route('/admin/faculty/add', methods=['POST'])
-@login_required
-def add_faculty():
-    name = request.form.get('name')
-    designation = request.form.get('designation')
-    email = request.form.get('email')
-    specialization = request.form.get('specialization')
-    
-    if name and email:
-        new_faculty = Faculty(
-            name=name, 
-            designation=designation, 
-            email=email, 
-            specialization=specialization
-        )
-        db.session.add(new_faculty)
-        db.session.commit()
-        
-    return redirect(url_for('admin_dashboard'))
+
 
 @app.route('/admin/faculty/delete/<int:id>', methods=['POST'])
 @login_required

@@ -1,32 +1,81 @@
 {% extends 'base.html' %}
 
-{% block title %}Events | CSE Department{% endblock %}
+{% block title %}Events | CSE - New Government Polytechnic{% endblock %}
 
 {% block content %}
-<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-    <h1 class="text-3xl font-extrabold text-gray-900 mb-8 border-b pb-4">Upcoming & Past Events</h1>
+<div class="bg-gradient-to-r from-blue-900 to-indigo-800 py-16 sm:py-20 relative overflow-hidden">
+    <div class="absolute inset-0 opacity-10" style="background-image: radial-gradient(#fff 1px, transparent 1px); background-size: 20px 20px;"></div>
+    
+    <div class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+        <span class="text-blue-300 font-bold tracking-widest uppercase text-sm mb-2 block">New Government Polytechnic</span>
+        <h1 class="text-4xl sm:text-5xl font-extrabold text-white tracking-tight drop-shadow-md">Department Events</h1>
+        <p class="mt-4 text-xl text-blue-100 max-w-2xl mx-auto font-light">
+            Stay updated with upcoming workshops, technical seminars, hackathons, and academic gatherings.
+        </p>
+    </div>
+</div>
 
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-20">
+    
+    <div class="flex items-center justify-between mb-10 border-b border-gray-200 pb-4">
+        <h2 class="text-2xl md:text-3xl font-extrabold text-gray-900">Event Calendar</h2>
+        
+        <div class="hidden sm:flex space-x-2">
+            <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-bold bg-blue-100 text-blue-800">Upcoming</span>
+        </div>
+    </div>
+
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
         {% for event in events %}
-        <div class="flex flex-col bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden">
-            <div class="bg-cseBlue text-white p-4 flex justify-between items-center">
-                <span class="font-bold text-lg">{{ event.event_date.strftime('%B %d, %Y') }}</span>
-                <span class="text-sm bg-blue-600 px-2 py-1 rounded">{{ event.event_date.strftime('%I:%M %p') }}</span>
+        <div class="group flex flex-col sm:flex-row bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden hover:shadow-2xl hover:-translate-y-1 transition-all duration-300">
+            
+            <div class="bg-gradient-to-b from-blue-600 to-blue-800 text-white w-full sm:w-32 flex-shrink-0 flex flex-row sm:flex-col items-center justify-between sm:justify-center p-4 sm:p-6 shadow-inner">
+                <span class="text-blue-200 text-sm font-bold uppercase tracking-widest sm:mb-1">{{ event.event_date.strftime('%b') }}</span>
+                <span class="text-3xl sm:text-5xl font-extrabold">{{ event.event_date.strftime('%d') }}</span>
+                <span class="text-blue-200 text-sm font-medium sm:mt-1 hidden sm:block">{{ event.event_date.strftime('%Y') }}</span>
+                
+                <span class="text-blue-200 text-sm font-medium sm:hidden">{{ event.event_date.strftime('%Y') }}</span>
             </div>
-            <div class="p-6 flex-grow">
-                <h3 class="text-2xl font-bold text-gray-900 mb-2">{{ event.title }}</h3>
-                <p class="text-gray-600 mb-4">{{ event.description }}</p>
-                <div class="flex items-center text-sm text-gray-500 font-medium">
-                    <svg class="h-5 w-5 mr-2 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
-                    </svg>
-                    {{ event.location }}
+            
+            <div class="p-6 sm:p-8 flex-grow flex flex-col justify-between">
+                <div>
+                    <div class="flex flex-col xl:flex-row xl:justify-between xl:items-start mb-3 gap-2">
+                        <h3 class="text-2xl font-bold text-gray-900 group-hover:text-blue-600 transition-colors line-clamp-2">
+                            {{ event.title }}
+                        </h3>
+                        
+                        <span class="inline-flex items-center w-fit px-3 py-1 rounded-full text-xs font-bold bg-blue-50 text-blue-700 whitespace-nowrap border border-blue-100">
+                            <svg class="w-3.5 h-3.5 mr-1.5 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                            {{ event.event_date.strftime('%I:%M %p') }}
+                        </span>
+                    </div>
+                    
+                    <p class="text-gray-600 leading-relaxed mb-6 line-clamp-3">
+                        {{ event.description }}
+                    </p>
+                </div>
+                
+                <div class="mt-auto pt-4 border-t border-gray-100 flex items-center text-sm text-gray-500 font-medium">
+                    <div class="w-8 h-8 rounded-full bg-gray-50 flex items-center justify-center mr-3 text-gray-400 group-hover:text-red-500 group-hover:bg-red-50 transition-colors">
+                        <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                        </svg>
+                    </div>
+                    <span class="truncate pr-4">{{ event.location }}</span>
                 </div>
             </div>
         </div>
         {% else %}
-        <p class="text-gray-500 italic col-span-full">No events are scheduled right now.</p>
+        
+        <div class="col-span-full bg-white rounded-2xl shadow-sm border border-gray-200 p-12 text-center flex flex-col items-center">
+            <div class="w-20 h-20 bg-gray-50 rounded-full flex items-center justify-center mb-4">
+                <svg class="w-10 h-10 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+            </div>
+            <h3 class="text-xl font-bold text-gray-900 mb-2">No Upcoming Events</h3>
+            <p class="text-gray-500 max-w-sm mx-auto">There are currently no events scheduled on the academic calendar. Please check back later for updates.</p>
+        </div>
+        
         {% endfor %}
     </div>
 </div>

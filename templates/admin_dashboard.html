@@ -136,9 +136,17 @@
                     <input type="text" name="specialization" placeholder="e.g. Artificial Intelligence" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 focus:ring-blue-500 focus:border-blue-500">
                 </div>
             </div>
-            <div class="pt-2">
-                <button type="submit" class="bg-blue-600 text-white px-6 py-2 rounded shadow hover:bg-blue-700 transition">Add Faculty</button>
-            </div>
+            <form action="/admin/faculty/add" method="POST" enctype="multipart/form-data" class="space-y-4">
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div class="md:col-span-2">
+            <label class="block text-sm font-medium text-gray-700">Profile Photo</label>
+            <input type="file" name="image" accept="image/*" class="mt-1 block w-full border border-gray-300 rounded-md p-2">
+        </div>
+    </div>
+    <div class="pt-2">
+        <button type="submit" class="bg-blue-600 text-white px-6 py-2 rounded shadow hover:bg-blue-700 transition">Add Faculty</button>
+    </div>
+</form>
         </form>
     </div>
 
@@ -197,17 +205,42 @@
             </div>
         </div>
 
-        <h3 class="text-xl font-semibold border-b pb-2 mt-8 mb-4">HOD Details</h3>
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div class="col-span-2 md:col-span-1">
-                <label class="block text-sm font-medium text-gray-700 mb-1">HOD Name</label>
-                <input type="text" name="hod_name" value="{{ info.hod_name }}" class="w-full border border-gray-300 rounded-md shadow-sm p-2">
-            </div>
-            <div class="col-span-2">
-                <label class="block text-sm font-medium text-gray-700 mb-1">HOD Message</label>
-                <textarea name="hod_message" rows="4" class="w-full border border-gray-300 rounded-md shadow-sm p-2">{{ info.hod_message }}</textarea>
-            </div>
+        <form action="/admin/settings/update" method="POST" enctype="multipart/form-data" class="bg-white p-6 rounded-lg shadow space-y-6">
+    <h3 class="text-xl font-semibold border-b pb-2 mt-8 mb-4">Principal Details</h3>
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1">Principal Name</label>
+            <input type="text" name="principal_name" value="{{ info.principal_name or '' }}" class="w-full border border-gray-300 rounded-md p-2">
+            
+            <label class="block text-sm font-medium text-gray-700 mb-1 mt-4">Principal Photo</label>
+            <input type="file" name="principal_image" accept="image/*" class="w-full border border-gray-300 rounded-md p-2">
+            {% if info.principal_image %}
+                <p class="text-xs text-green-600 mt-1">✓ Photo currently uploaded</p>
+            {% endif %}
         </div>
+        <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1">Principal Message</label>
+            <textarea name="principal_message" rows="5" class="w-full border border-gray-300 rounded-md p-2">{{ info.principal_message or '' }}</textarea>
+        </div>
+    </div>
+
+    <h3 class="text-xl font-semibold border-b pb-2 mt-8 mb-4">HOD Details</h3>
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1">HOD Name</label>
+            <input type="text" name="hod_name" value="{{ info.hod_name or '' }}" class="w-full border border-gray-300 rounded-md p-2">
+            
+            <label class="block text-sm font-medium text-gray-700 mb-1 mt-4">HOD Photo</label>
+            <input type="file" name="hod_image" accept="image/*" class="w-full border border-gray-300 rounded-md p-2">
+            {% if info.hod_image %}
+                <p class="text-xs text-green-600 mt-1">✓ Photo currently uploaded</p>
+            {% endif %}
+        </div>
+        <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1">HOD Message</label>
+            <textarea name="hod_message" rows="5" class="w-full border border-gray-300 rounded-md p-2">{{ info.hod_message or '' }}</textarea>
+        </div>
+    </div>
 
         <h3 class="text-xl font-semibold border-b pb-2 mt-8 mb-4">Contact Information</h3>
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">

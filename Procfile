@@ -1,1 +1,1 @@
-web: gunicorn app:app
+web: python create_admin.py && gunicorn app:app

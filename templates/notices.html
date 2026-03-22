@@ -1,37 +1,73 @@
 {% extends 'base.html' %}
 
-{% block title %}Notices | CSE Department{% endblock %}
+{% block title %}Notices | CSE - New Government Polytechnic{% endblock %}
 
 {% block content %}
-<div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-    <h1 class="text-3xl font-extrabold text-gray-900 mb-8 border-b pb-4">Department Notices</h1>
+<div class="bg-gradient-to-r from-blue-900 to-indigo-800 py-16 sm:py-20 relative overflow-hidden">
+    <div class="absolute inset-0 opacity-10" style="background-image: radial-gradient(#fff 1px, transparent 1px); background-size: 20px 20px;"></div>
+    
+    <div class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+        <span class="text-blue-300 font-bold tracking-widest uppercase text-sm mb-2 block">New Government Polytechnic</span>
+        <h1 class="text-4xl sm:text-5xl font-extrabold text-white tracking-tight drop-shadow-md">Notice Board</h1>
+        <p class="mt-4 text-xl text-blue-100 max-w-2xl mx-auto font-light">
+            Official announcements, academic schedules, and important updates from the CSE Department.
+        </p>
+    </div>
+</div>
 
-    <div class="space-y-6">
+<div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-20">
+    
+    <div class="flex items-center justify-between mb-10 border-b border-gray-200 pb-4">
+        <h2 class="text-2xl md:text-3xl font-extrabold text-gray-900">Recent Announcements</h2>
+    </div>
+
+    <div class="space-y-8">
         {% for notice in notices %}
-        <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-200 {% if notice.is_highlight %}border-l-4 border-l-red-500{% endif %}">
-            <div class="flex justify-between items-start">
-                <h2 class="text-xl font-bold text-gray-900">{{ notice.title }}</h2>
-                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-800">
-                    {{ notice.date_posted.strftime('%d %b, %Y') }}
+        
+        <div class="relative bg-white rounded-2xl shadow-lg border border-gray-100 p-6 sm:p-8 hover:shadow-xl transition-shadow duration-300 {% if notice.is_highlight %}border-l-4 border-l-red-500 ring-1 ring-red-50{% endif %}">
+            
+            {% if notice.is_highlight %}
+            <div class="absolute top-0 right-0 -mt-3 mr-6 px-4 py-1 bg-red-500 text-white text-xs font-extrabold uppercase tracking-widest rounded-full shadow-md">
+                Important
+            </div>
+            {% endif %}
+
+            <div class="flex flex-col sm:flex-row sm:justify-between sm:items-start mb-5 gap-4">
+                <h2 class="text-xl sm:text-2xl font-bold text-gray-900 leading-tight group-hover:text-blue-600 transition-colors">
+                    {{ notice.title }}
+                </h2>
+                
+                <span class="inline-flex items-center px-3 py-1.5 rounded-full text-xs font-bold bg-blue-50 text-blue-700 whitespace-nowrap border border-blue-100">
+                    <svg class="w-4 h-4 mr-1.5 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+                    {{ notice.date_posted.strftime('%B %d, %Y') }}
                 </span>
             </div>
-            <p class="mt-4 text-gray-600 whitespace-pre-line">{{ notice.content }}</p>
-        </div>
-        <p class="mt-4 text-gray-600 whitespace-pre-line">{{ notice.content }}</p>
 
-{% if notice.pdf_file %}
-<div class="mt-4">
-    <a href="{{ url_for('static', filename='uploads/' + notice.pdf_file) }}" target="_blank" class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none">
-        <svg class="mr-2 h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
-        Download Attachment
-    </a>
-</div>
-{% endif %}
+            <div class="text-gray-600 leading-relaxed whitespace-pre-line text-base sm:text-lg mb-6">
+                {{ notice.content }}
+            </div>
+
+            {% if notice.pdf_file %}
+            <div class="pt-5 border-t border-gray-100 mt-auto">
+                <a href="{{ url_for('static', filename='uploads/' + notice.pdf_file) }}" target="_blank" class="inline-flex items-center px-5 py-2.5 border border-transparent text-sm font-bold rounded-xl shadow-sm text-white bg-blue-600 hover:bg-blue-700 hover:-translate-y-0.5 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-all duration-200">
+                    <svg class="mr-2 h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
+                    View Official Document (PDF)
+                </a>
+            </div>
+            {% endif %}
+            
+        </div>
+
         {% else %}
-        <div class="text-center py-10 text-gray-500">
-            <p>There are no new notices at this time.</p>
+        <div class="bg-white rounded-2xl shadow-sm border border-gray-200 p-12 text-center flex flex-col items-center">
+            <div class="w-20 h-20 bg-blue-50 rounded-full flex items-center justify-center mb-4">
+                <svg class="w-10 h-10 text-blue-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
+            </div>
+            <h3 class="text-xl font-bold text-gray-900 mb-2">No Active Notices</h3>
+            <p class="text-gray-500 max-w-sm mx-auto">There are currently no new announcements from the department. Check back later!</p>
         </div>
         {% endfor %}
     </div>
+    
 </div>
 {% endblock %}
