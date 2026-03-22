@@ -1,11 +1,10 @@
 {% extends 'base.html' %}
 
-{% block title %}Home | CSE Department{% endblock %}
+{% block title %}Home | CSE - New Government Polytechnic{% endblock %}
 
 {% block content %}
-
 {% if banners %}
-<div class="relative bg-gray-900 h-[500px] sm:h-[600px] overflow-hidden" 
+<div class="relative bg-gray-900 h-[500px] sm:h-[650px] overflow-hidden" 
      x-data="{ activeSlide: 0, slides: {{ banners|length }} }" 
      x-init="setInterval(() => { activeSlide = activeSlide === slides - 1 ? 0 : activeSlide + 1 }, 5000)">
     
@@ -21,34 +20,37 @@
          
         <img src="{{ url_for('static', filename='uploads/' + banner.image_path) }}" alt="{{ banner.heading }}" class="w-full h-full object-cover" />
         <div class="absolute inset-0 bg-blue-900 bg-opacity-70 mix-blend-multiply"></div>
-        <div class="absolute inset-0 bg-gradient-to-t from-gray-900 via-transparent to-transparent"></div>
+        <div class="absolute inset-0 bg-gradient-to-t from-gray-900 via-gray-900/40 to-transparent"></div>
         
-        <div class="absolute inset-0 flex flex-col items-center justify-center text-center px-4 sm:px-6 lg:px-8 max-w-5xl mx-auto z-10">
+        <div class="absolute inset-0 flex flex-col items-center justify-center text-center px-4 sm:px-6 lg:px-8 max-w-5xl mx-auto z-10 pt-16">
+            <span class="block text-blue-400 font-bold tracking-widest uppercase text-sm sm:text-base mb-4 drop-shadow-md">New Government Polytechnic</span>
+            
             {% if banner.heading %}
-            <h1 class="text-4xl sm:text-5xl md:text-6xl font-extrabold text-white tracking-tight mb-4 drop-shadow-lg">
+            <h1 class="text-4xl sm:text-5xl md:text-6xl font-extrabold text-white tracking-tight mb-6 drop-shadow-lg leading-tight">
                 {{ banner.heading }}
             </h1>
             {% endif %}
             
             {% if banner.subheading %}
-            <p class="max-w-2xl mx-auto text-lg sm:text-xl text-gray-200 mb-8 drop-shadow-md">
+            <p class="max-w-2xl mx-auto text-lg sm:text-2xl text-gray-200 mb-10 drop-shadow-md font-light">
                 {{ banner.subheading }}
             </p>
             {% endif %}
             
-            <div class="flex flex-col sm:flex-row justify-center items-center gap-4">
-                <a href="/courses" class="w-full sm:w-auto px-8 py-3 border border-transparent text-base font-bold rounded-md text-blue-900 bg-white hover:bg-gray-100 transition shadow-lg">Explore Programs</a>
+            <div class="flex flex-col sm:flex-row justify-center items-center gap-4 mt-4">
+                <a href="/about" class="w-full sm:w-auto px-8 py-3 border border-transparent text-base font-bold rounded-md text-blue-900 bg-white hover:bg-gray-100 transition shadow-lg">Discover More</a>
+                <a href="/courses" class="w-full sm:w-auto px-8 py-3 border-2 border-white text-base font-bold rounded-md text-white hover:bg-white hover:text-blue-900 transition shadow-lg">Our Programs</a>
             </div>
         </div>
     </div>
     {% endfor %}
 
     {% if banners|length > 1 %}
-    <div class="absolute bottom-20 left-0 right-0 flex justify-center space-x-2 z-20">
+    <div class="absolute bottom-24 left-0 right-0 flex justify-center space-x-3 z-20">
         {% for banner in banners %}
         <button @click="activeSlide = {{ loop.index0 }}" 
-                :class="{'bg-white': activeSlide === {{ loop.index0 }}, 'bg-white/50': activeSlide !== {{ loop.index0 }}}" 
-                class="w-3 h-3 rounded-full focus:outline-none transition-colors duration-300"></button>
+                :class="{'bg-white w-8': activeSlide === {{ loop.index0 }}, 'bg-white/50 w-3': activeSlide !== {{ loop.index0 }}}" 
+                class="h-3 rounded-full focus:outline-none transition-all duration-300"></button>
         {% endfor %}
     </div>
     {% endif %}
@@ -59,49 +61,173 @@
         <div class="absolute inset-0 bg-blue-900 bg-opacity-70 mix-blend-multiply"></div>
     </div>
     <div class="relative z-10 text-center px-4 max-w-5xl mx-auto">
-        <h1 class="text-5xl font-extrabold text-white mb-6">Welcome to the CSE Department</h1>
+        <span class="block text-blue-400 font-bold tracking-widest uppercase text-sm mb-4">New Government Polytechnic</span>
+        <h1 class="text-5xl font-extrabold text-white mb-6">Department of Computer Science & Engineering</h1>
         <p class="text-xl text-gray-200">Please upload a banner from the Admin Panel.</p>
     </div>
 </div>
 {% endif %}
 
+<div class="relative z-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 -mt-12">
+    <div class="bg-white rounded-xl shadow-2xl border border-gray-100 grid grid-cols-2 md:grid-cols-4 divide-x divide-gray-100 p-6 text-center transform transition duration-500 hover:scale-[1.01]">
+        <div class="p-2 sm:p-4">
+            <p class="text-3xl sm:text-4xl font-extrabold text-blue-600">50+</p>
+            <p class="text-xs sm:text-sm text-gray-500 font-medium mt-1 uppercase tracking-wide">Expert Faculty</p>
+        </div>
+        <div class="p-2 sm:p-4">
+            <p class="text-3xl sm:text-4xl font-extrabold text-blue-600">100%</p>
+            <p class="text-xs sm:text-sm text-gray-500 font-medium mt-1 uppercase tracking-wide">Placement Rate</p>
+        </div>
+        <div class="p-2 sm:p-4">
+            <p class="text-3xl sm:text-4xl font-extrabold text-blue-600">15+</p>
+            <p class="text-xs sm:text-sm text-gray-500 font-medium mt-1 uppercase tracking-wide">Tech Labs</p>
+        </div>
+        <div class="p-2 sm:p-4">
+            <p class="text-3xl sm:text-4xl font-extrabold text-blue-600">5k+</p>
+            <p class="text-xs sm:text-sm text-gray-500 font-medium mt-1 uppercase tracking-wide">Alumni Network</p>
+        </div>
+    </div>
+</div>
 
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-        <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
-            <h2 class="text-2xl font-bold text-gray-900 mb-6 border-b pb-2">Recent Announcements</h2>
-            {% if notices %}
-                <ul class="space-y-4">
-                {% for notice in notices %}
-                    <li class="p-4 bg-gray-50 rounded border-l-4 border-cseAccent">
-                        <h3 class="font-bold text-lg">{{ notice.title }}</h3>
-                        <p class="text-sm text-gray-600 mt-1">{{ notice.content }}</p>
-                        <span class="text-xs text-gray-400 mt-2 block">{{ notice.date_posted.strftime('%B %d, %Y') }}</span>
-                    </li>
-                {% endfor %}
-                </ul>
-            {% else %}
-                <p class="text-gray-500 italic">No recent announcements.</p>
-            {% endif %}
-            <a href="/notices" class="inline-block mt-4 text-cseAccent hover:underline text-sm font-semibold">View all notices &rarr;</a>
+<div class="bg-gray-50 py-16 mt-12">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center max-w-3xl mx-auto mb-12">
+            <h2 class="text-base text-blue-600 font-bold tracking-wider uppercase">New Government Polytechnic</h2>
+            <p class="mt-2 text-3xl leading-8 font-extrabold tracking-tight text-gray-900 sm:text-4xl">
+                CSE Department
+            </p>
+            <p class="mt-4 max-w-2xl text-lg text-gray-500 mx-auto">
+                Welcome to the Department of Computer Science & Engineering at New Government Polytechnic. We are committed to providing an outstanding educational environment that empowers our students to become innovators, researchers, and tech leaders of tomorrow.
+            </p>
+        </div>
+    </div>
+</div>
+
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        
+        <div class="bg-white p-6 md:p-8 rounded-2xl shadow-lg border border-gray-100 flex flex-col h-full">
+            <div class="flex items-center justify-between mb-6 pb-4 border-b border-gray-100">
+                <h2 class="text-2xl font-bold text-gray-900 flex items-center">
+                    <svg class="w-6 h-6 mr-2 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5.882V19.24a1.76 1.76 0 01-3.417.592l-2.147-6.15M18 13a3 3 0 100-6M5.436 13.683A4.001 4.001 0 017 6h1.832c4.1 0 7.625-1.234 9.168-3v14c-1.543-1.766-5.067-3-9.168-3H7a3.988 3.988 0 01-1.564-.317z"></path></svg>
+                    Notice Board
+                </h2>
+            </div>
+            
+            <div class="flex-grow">
+                {% if notices %}
+                    <ul class="space-y-5">
+                    {% for notice in notices %}
+                        <li class="group relative bg-gray-50 p-4 rounded-xl border-l-4 transition-all duration-200 hover:shadow-md {% if notice.is_highlight %}border-red-500 bg-red-50/30{% else %}border-blue-500 hover:border-blue-600{% endif %}">
+                            <div class="flex justify-between items-start mb-1">
+                                <h3 class="font-bold text-gray-900 group-hover:text-blue-600 transition-colors">{{ notice.title }}</h3>
+                                {% if notice.is_highlight %}
+                                    <span class="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-bold bg-red-100 text-red-800 uppercase tracking-wide">New</span>
+                                {% endif %}
+                            </div>
+                            <p class="text-sm text-gray-600 line-clamp-2">{{ notice.content }}</p>
+                            <div class="mt-3 flex justify-between items-center text-xs text-gray-500">
+                                <span class="font-medium flex items-center"><svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>{{ notice.date_posted.strftime('%B %d, %Y') }}</span>
+                                {% if notice.pdf_file %}
+                                    <a href="{{ url_for('static', filename='uploads/' + notice.pdf_file) }}" target="_blank" class="text-blue-600 hover:text-blue-800 font-bold flex items-center">PDF <svg class="w-3 h-3 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg></a>
+                                {% endif %}
+                            </div>
+                        </li>
+                    {% endfor %}
+                    </ul>
+                {% else %}
+                    <p class="text-gray-500 italic text-center py-8">No recent announcements.</p>
+                {% endif %}
+            </div>
+            <div class="mt-6 pt-4 border-t border-gray-100 text-center">
+                <a href="/notices" class="text-blue-600 hover:text-blue-800 font-semibold text-sm inline-flex items-center transition-colors">View All Notices <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg></a>
+            </div>
         </div>
 
-        <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
-            <h2 class="text-2xl font-bold text-gray-900 mb-6 border-b pb-2">Quick Links</h2>
-            <div class="grid grid-cols-2 gap-4">
-                <a href="/courses" class="flex flex-col items-center justify-center p-6 bg-blue-50 rounded-lg hover:bg-blue-100 transition">
-                    <span class="font-bold text-blue-900">Syllabus</span>
+        <div class="bg-white p-6 md:p-8 rounded-2xl shadow-lg border border-gray-100 flex flex-col h-full">
+            <div class="flex items-center justify-between mb-6 pb-4 border-b border-gray-100">
+                <h2 class="text-2xl font-bold text-gray-900 flex items-center">
+                    <svg class="w-6 h-6 mr-2 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+                    Upcoming Events
+                </h2>
+            </div>
+            
+            <div class="flex-grow">
+                {% if events %}
+                    <ul class="space-y-4">
+                    {% for event in events %}
+                        <li class="flex items-center bg-gray-50 rounded-xl p-3 hover:bg-white hover:shadow-md transition duration-200 border border-transparent hover:border-gray-200">
+                            <div class="flex-shrink-0 bg-blue-900 rounded-lg text-white w-16 h-16 flex flex-col items-center justify-center shadow-inner">
+                                <span class="text-xs font-medium uppercase tracking-wider">{{ event.event_date.strftime('%b') }}</span>
+                                <span class="text-2xl font-bold leading-none">{{ event.event_date.strftime('%d') }}</span>
+                            </div>
+                            <div class="ml-4 flex-grow">
+                                <h3 class="font-bold text-gray-900 text-sm sm:text-base">{{ event.title }}</h3>
+                                <div class="mt-1 flex items-center text-xs text-gray-500">
+                                    <svg class="w-3.5 h-3.5 mr-1.5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                                    {{ event.event_date.strftime('%I:%M %p') }}
+                                </div>
+                                <div class="mt-1 flex items-center text-xs text-gray-500">
+                                    <svg class="w-3.5 h-3.5 mr-1.5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+                                    {{ event.location }}
+                                </div>
+                            </div>
+                        </li>
+                    {% endfor %}
+                    </ul>
+                {% else %}
+                    <div class="text-center py-8">
+                        <svg class="mx-auto h-12 w-12 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+                        <p class="mt-2 text-sm text-gray-500">No upcoming events scheduled.</p>
+                    </div>
+                {% endif %}
+            </div>
+            <div class="mt-6 pt-4 border-t border-gray-100 text-center">
+                <a href="/events" class="text-blue-600 hover:text-blue-800 font-semibold text-sm inline-flex items-center transition-colors">Event Calendar <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg></a>
+            </div>
+        </div>
+
+        <div class="bg-white p-6 md:p-8 rounded-2xl shadow-lg border border-gray-100 h-full">
+            <div class="flex items-center justify-between mb-6 pb-4 border-b border-gray-100">
+                <h2 class="text-2xl font-bold text-gray-900 flex items-center">
+                    <svg class="w-6 h-6 mr-2 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"></path></svg>
+                    Quick Resources
+                </h2>
+            </div>
+            
+            <div class="grid grid-cols-1 gap-4">
+                <a href="/courses" class="group flex items-center p-4 bg-blue-50/50 rounded-xl hover:bg-blue-600 transition-colors duration-300 border border-blue-100 hover:border-blue-600">
+                    <div class="p-3 bg-white rounded-lg shadow-sm group-hover:bg-blue-500 transition-colors">
+                        <svg class="w-6 h-6 text-blue-600 group-hover:text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path></svg>
+                    </div>
+                    <div class="ml-4">
+                        <h3 class="font-bold text-blue-900 group-hover:text-white transition-colors">Curriculum & Syllabus</h3>
+                        <p class="text-xs text-blue-600/80 group-hover:text-blue-100 transition-colors">Explore B.Tech & M.Tech courses</p>
+                    </div>
                 </a>
-                <a href="/faculty" class="flex flex-col items-center justify-center p-6 bg-green-50 rounded-lg hover:bg-green-100 transition">
-                    <span class="font-bold text-green-900">Faculty</span>
+
+                <a href="/faculty" class="group flex items-center p-4 bg-green-50/50 rounded-xl hover:bg-green-600 transition-colors duration-300 border border-green-100 hover:border-green-600">
+                    <div class="p-3 bg-white rounded-lg shadow-sm group-hover:bg-green-500 transition-colors">
+                        <svg class="w-6 h-6 text-green-600 group-hover:text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path></svg>
+                    </div>
+                    <div class="ml-4">
+                        <h3 class="font-bold text-green-900 group-hover:text-white transition-colors">Faculty Directory</h3>
+                        <p class="text-xs text-green-600/80 group-hover:text-green-100 transition-colors">Meet our expert professors</p>
+                    </div>
                 </a>
-                <a href="/research" class="flex flex-col items-center justify-center p-6 bg-purple-50 rounded-lg hover:bg-purple-100 transition">
-                    <span class="font-bold text-purple-900">Research</span>
-                </a>
-                <a href="/students" class="flex flex-col items-center justify-center p-6 bg-orange-50 rounded-lg hover:bg-orange-100 transition">
-                    <span class="font-bold text-orange-900">Student Corner</span>
+
+                <a href="/gallery" class="group flex items-center p-4 bg-purple-50/50 rounded-xl hover:bg-purple-600 transition-colors duration-300 border border-purple-100 hover:border-purple-600">
+                    <div class="p-3 bg-white rounded-lg shadow-sm group-hover:bg-purple-500 transition-colors">
+                        <svg class="w-6 h-6 text-purple-600 group-hover:text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+                    </div>
+                    <div class="ml-4">
+                        <h3 class="font-bold text-purple-900 group-hover:text-white transition-colors">Photo Gallery</h3>
+                        <p class="text-xs text-purple-600/80 group-hover:text-purple-100 transition-colors">Life at the CSE Department</p>
+                    </div>
                 </a>
             </div>
         </div>
+        
     </div>
 </div>
 {% endblock %}
