@@ -1,651 +1,735 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="h-full bg-slate-50">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Control Panel | CSE Dept</title>
+    <title>Admin Portal | CSE Department</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Plus Jakarta Sans', sans-serif; }
+        [x-cloak] { display: none !important; }
+        .custom-scrollbar::-webkit-scrollbar { width: 4px; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: #334155; border-radius: 10px; }
+    </style>
 </head>
-<body class="bg-gray-100 font-sans antialiased text-gray-900" x-data="{ activeTab: 'overview' }">
+<body class="h-full antialiased text-slate-800" x-data="{ activeTab: 'overview', mobileMenu: false }">
 
-    <div class="flex h-screen overflow-hidden">
-        
-        <aside class="w-64 bg-gray-900 text-white flex flex-col">
-            <div class="p-6 text-center border-b border-gray-800">
-                <h2 class="text-2xl font-bold">CSE Admin</h2>
-                <p class="text-sm text-gray-400 mt-1">Logged in as {{ session['admin_username'] }}</p>
+<div class="flex h-screen overflow-hidden">
+    
+    <aside class="hidden lg:flex w-72 bg-slate-900 text-white flex-col shadow-2xl z-50">
+        <div class="p-8 border-b border-slate-800">
+            <div class="flex items-center gap-3">
+                <div class="w-10 h-10 bg-blue-600 rounded-xl flex items-center justify-center font-bold text-xl shadow-lg shadow-blue-500/30">C</div>
+                <div>
+                    <h2 class="text-lg font-bold leading-tight">CSE Admin</h2>
+                    <p class="text-[10px] text-slate-400 uppercase tracking-widest font-semibold">Department Portal</p>
+                </div>
             </div>
-            <nav class="flex-1 p-4 space-y-2">
-                <button @click="activeTab = 'overview'" :class="{ 'bg-blue-600': activeTab === 'overview' }" class="w-full text-left px-4 py-2 rounded hover:bg-gray-800 transition">Overview</button>
-                <button @click="activeTab = 'notices'" :class="{ 'bg-blue-600': activeTab === 'notices' }" class="w-full text-left px-4 py-2 rounded hover:bg-gray-800 transition">Manage Notices</button>
-                 <button @click="activeTab = 'settings'" :class="{ 'bg-blue-600': activeTab === 'settings' }" class="w-full text-left px-4 py-2 rounded hover:bg-gray-800 transition">Site Settings</button>
-                <button @click="activeTab = 'faculty'" :class="{ 'bg-blue-600': activeTab === 'faculty' }" class="w-full text-left px-4 py-2 rounded hover:bg-gray-800 transition">Manage Faculty</button>
-                <button @click="activeTab = 'courses'" :class="{ 'bg-blue-600': activeTab === 'courses' }" class="w-full text-left px-4 py-2 rounded hover:bg-gray-800 transition">Manage Courses</button>
-                <button @click="activeTab = 'gallery'" :class="{ 'bg-blue-600': activeTab === 'gallery' }" class="w-full text-left px-4 py-2 rounded hover:bg-gray-800 transition">Manage Gallery</button>
-                <button @click="activeTab = 'events'" :class="{ 'bg-blue-600': activeTab === 'events' }" class="w-full text-left px-4 py-2 rounded hover:bg-gray-800 transition duration-150 flex items-center">
-    <svg class="w-5 h-5 mr-3 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
-    Manage Events
-</button>
-<button @click="activeTab = 'banners'" :class="{ 'bg-blue-600': activeTab === 'banners' }" class="w-full text-left px-4 py-2 rounded hover:bg-gray-800 transition flex items-center">
-    <svg class="w-5 h-5 mr-3 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
-    Manage Banners
-</button>
-                
-            </nav>
-            <div class="p-4 border-t border-gray-800">
-                <a href="/admin/logout" class="block w-full text-center px-4 py-2 bg-red-600 rounded hover:bg-red-700 transition">Logout</a>
-            </div>
-        </aside>
+        </div>
 
-        <main class="flex-1 overflow-y-auto p-8">
+        <nav class="flex-1 p-6 space-y-1.5 overflow-y-auto custom-scrollbar">
+            <p class="text-[10px] text-slate-500 font-bold uppercase tracking-widest mb-2 px-4">Analytics</p>
             
-            <div x-show="activeTab === 'overview'" x-transition>
-                <h1 class="text-3xl font-bold mb-6">Dashboard Overview</h1>
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                    <div class="bg-white p-6 rounded-lg shadow border-l-4 border-blue-500">
-                        <h3 class="text-gray-500 text-sm font-semibold uppercase">Total Notices</h3>
-                        <p class="text-3xl font-bold text-gray-900">{{ stats.total_notices }}</p>
+            <button @click="activeTab = 'overview'" :class="activeTab === 'overview' ? 'bg-blue-600 text-white shadow-lg' : 'text-slate-400 hover:bg-slate-800 hover:text-white'" class="w-full flex items-center px-4 py-3 rounded-xl transition-all duration-200">
+                <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"></path></svg>
+                <span class="font-semibold text-sm">Dashboard</span>
+            </button>
+
+            <p class="text-[10px] text-slate-500 font-bold uppercase tracking-widest pt-4 mb-2 px-4">Content</p>
+
+            <button @click="activeTab = 'notices'" :class="activeTab === 'notices' ? 'bg-blue-600 text-white shadow-lg' : 'text-slate-400 hover:bg-slate-800 hover:text-white'" class="w-full flex items-center px-4 py-3 rounded-xl transition-all duration-200">
+                <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"></path></svg>
+                <span class="font-semibold text-sm">Notices</span>
+            </button>
+
+            <button @click="activeTab = 'events'" :class="activeTab === 'events' ? 'bg-blue-600 text-white shadow-lg' : 'text-slate-400 hover:bg-slate-800 hover:text-white'" class="w-full flex items-center px-4 py-3 rounded-xl transition-all duration-200">
+                <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+                <span class="font-semibold text-sm">Events</span>
+            </button>
+
+            <button @click="activeTab = 'faculty'" :class="activeTab === 'faculty' ? 'bg-blue-600 text-white shadow-lg' : 'text-slate-400 hover:bg-slate-800 hover:text-white'" class="w-full flex items-center px-4 py-3 rounded-xl transition-all duration-200">
+                <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
+                <span class="font-semibold text-sm">Faculty</span>
+            </button>
+
+            <button @click="activeTab = 'courses'" :class="activeTab === 'courses' ? 'bg-blue-600 text-white shadow-lg' : 'text-slate-400 hover:bg-slate-800 hover:text-white'" class="w-full flex items-center px-4 py-3 rounded-xl transition-all duration-200">
+                <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path></svg>
+                <span class="font-semibold text-sm">Courses</span>
+            </button>
+
+            <button @click="activeTab = 'gallery'" :class="activeTab === 'gallery' ? 'bg-blue-600 text-white shadow-lg' : 'text-slate-400 hover:bg-slate-800 hover:text-white'" class="w-full flex items-center px-4 py-3 rounded-xl transition-all duration-200">
+                <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+                <span class="font-semibold text-sm">Gallery</span>
+            </button>
+
+            <p class="text-[10px] text-slate-500 font-bold uppercase tracking-widest pt-4 mb-2 px-4">System</p>
+
+            <button @click="activeTab = 'banners'" :class="activeTab === 'banners' ? 'bg-blue-600 text-white shadow-lg' : 'text-slate-400 hover:bg-slate-800 hover:text-white'" class="w-full flex items-center px-4 py-3 rounded-xl transition-all duration-200">
+                <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path></svg>
+                <span class="font-semibold text-sm">Banners</span>
+            </button>
+
+            <button @click="activeTab = 'settings'" :class="activeTab === 'settings' ? 'bg-blue-600 text-white shadow-lg' : 'text-slate-400 hover:bg-slate-800 hover:text-white'" class="w-full flex items-center px-4 py-3 rounded-xl transition-all duration-200">
+                <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+                <span class="font-semibold text-sm">Site Settings</span>
+            </button>
+        </nav>
+
+        <div class="p-6 bg-slate-950 border-t border-slate-800">
+            <div class="flex items-center gap-3 mb-6">
+                <div class="w-10 h-10 rounded-full bg-slate-800 flex items-center justify-center font-bold text-blue-400 border border-slate-700 uppercase">{{ session['admin_username'][0] }}</div>
+                <div>
+                    <p class="text-xs font-bold text-white">{{ session['admin_username'] }}</p>
+                    <p class="text-[10px] text-slate-500 font-medium">Active Session</p>
+                </div>
+            </div>
+            <a href="/admin/logout" class="block w-full text-center px-4 py-3 bg-red-500/10 text-red-500 border border-red-500/20 rounded-xl hover:bg-red-500 hover:text-white transition-all text-xs font-bold uppercase tracking-widest">Logout</a>
+        </div>
+    </aside>
+
+    <header class="lg:hidden fixed top-0 w-full flex items-center justify-between px-6 py-4 bg-slate-900 text-white z-40 shadow-md">
+        <span class="font-bold text-lg">CSE Admin</span>
+        <button @click="mobileMenu = !mobileMenu" class="p-2 bg-slate-800 rounded-md">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path></svg>
+        </button>
+    </header>
+
+    <div x-show="mobileMenu" x-transition x-cloak class="fixed inset-0 z-50 lg:hidden">
+        <div class="fixed inset-0 bg-slate-900/80 backdrop-blur-sm" @click="mobileMenu = false"></div>
+        <div class="fixed inset-y-0 left-0 w-64 bg-slate-900 shadow-2xl p-6 flex flex-col overflow-y-auto">
+            <button @click="mobileMenu = false" class="self-end p-2 text-slate-400 mb-6">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+            </button>
+            <nav class="space-y-2">
+                <button @click="activeTab = 'overview'; mobileMenu = false" class="w-full text-left text-white font-semibold p-3 rounded-lg hover:bg-slate-800">Dashboard</button>
+                <button @click="activeTab = 'notices'; mobileMenu = false" class="w-full text-left text-white font-semibold p-3 rounded-lg hover:bg-slate-800">Notices</button>
+                <button @click="activeTab = 'events'; mobileMenu = false" class="w-full text-left text-white font-semibold p-3 rounded-lg hover:bg-slate-800">Events</button>
+                <button @click="activeTab = 'faculty'; mobileMenu = false" class="w-full text-left text-white font-semibold p-3 rounded-lg hover:bg-slate-800">Faculty</button>
+                <button @click="activeTab = 'courses'; mobileMenu = false" class="w-full text-left text-white font-semibold p-3 rounded-lg hover:bg-slate-800">Courses</button>
+                <button @click="activeTab = 'gallery'; mobileMenu = false" class="w-full text-left text-white font-semibold p-3 rounded-lg hover:bg-slate-800">Gallery</button>
+                <button @click="activeTab = 'banners'; mobileMenu = false" class="w-full text-left text-white font-semibold p-3 rounded-lg hover:bg-slate-800">Banners</button>
+                <button @click="activeTab = 'settings'; mobileMenu = false" class="w-full text-left text-white font-semibold p-3 rounded-lg hover:bg-slate-800">Settings</button>
+            </nav>
+        </div>
+    </div>
+
+    <main class="flex-1 overflow-y-auto relative pt-20 lg:pt-0">
+        <div class="p-6 sm:p-10 max-w-7xl mx-auto">
+            
+            <div x-show="activeTab === 'overview'" x-transition:enter="transition duration-300 transform" x-transition:enter-start="opacity-0 translate-y-4">
+                <h1 class="text-3xl font-extrabold text-slate-900 mb-2">Welcome Back!</h1>
+                <p class="text-slate-500 mb-10">Here is what is happening in the CSE department today.</p>
+                
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                    <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 group hover:border-blue-500 transition-all duration-300">
+                        <div class="w-12 h-12 bg-blue-50 text-blue-600 rounded-xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"></path></svg></div>
+                        <h3 class="text-slate-500 text-xs font-bold uppercase tracking-widest">Notices</h3>
+                        <p class="text-3xl font-black text-slate-900 mt-1">{{ stats.total_notices }}</p>
                     </div>
-                    <div class="bg-white p-6 rounded-lg shadow border-l-4 border-green-500">
-                        <h3 class="text-gray-500 text-sm font-semibold uppercase">Total Faculty</h3>
-                        <p class="text-3xl font-bold text-gray-900">{{ stats.total_faculty }}</p>
+                    <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 group hover:border-green-500 transition-all duration-300">
+                        <div class="w-12 h-12 bg-green-50 text-green-600 rounded-xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"></path></svg></div>
+                        <h3 class="text-slate-500 text-xs font-bold uppercase tracking-widest">Faculty</h3>
+                        <p class="text-3xl font-black text-slate-900 mt-1">{{ stats.total_faculty }}</p>
                     </div>
-                    <div class="bg-white p-6 rounded-lg shadow border-l-4 border-purple-500">
-                        <h3 class="text-gray-500 text-sm font-semibold uppercase">Total Courses</h3>
-                        <p class="text-3xl font-bold text-gray-900">{{ stats.total_courses }}</p>
+                    <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 group hover:border-purple-500 transition-all duration-300">
+                        <div class="w-12 h-12 bg-purple-50 text-purple-600 rounded-xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path></svg></div>
+                        <h3 class="text-slate-500 text-xs font-bold uppercase tracking-widest">Courses</h3>
+                        <p class="text-3xl font-black text-slate-900 mt-1">{{ stats.total_courses }}</p>
+                    </div>
+                    <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 group hover:border-orange-500 transition-all duration-300">
+                        <div class="w-12 h-12 bg-orange-50 text-orange-600 rounded-xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg></div>
+                        <h3 class="text-slate-500 text-xs font-bold uppercase tracking-widest">Events</h3>
+                        <p class="text-3xl font-black text-slate-900 mt-1">{{ stats.total_events }}</p>
                     </div>
                 </div>
             </div>
 
-            <div x-show="activeTab === 'notices'" x-transition style="display: none;">
-                <h1 class="text-3xl font-bold mb-6">Manage Notices</h1>
-                
-                <div class="bg-white p-6 rounded-lg shadow mb-8 border border-gray-200">
-    <h2 class="text-xl font-semibold mb-4 border-b pb-2 text-blue-900">Post New Notice</h2>
-    <form action="/admin/notice/add" method="POST" enctype="multipart/form-data" class="space-y-4">
-        <div>
-            <label class="block text-sm font-medium text-gray-700">Notice Title</label>
-            <input type="text" name="title" required class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 focus:ring-blue-500 focus:border-blue-500">
-        </div>
-        <div>
-            <label class="block text-sm font-medium text-gray-700">Notice Content</label>
-            <textarea name="content" rows="3" required class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 focus:ring-blue-500 focus:border-blue-500"></textarea>
-        </div>
-        
-        <div>
-            <label class="block text-sm font-medium text-gray-700">Attach PDF (Optional)</label>
-            <input type="file" name="pdf_file" accept=".pdf" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100">
-        </div>
+            <div x-show="activeTab === 'notices'" x-transition:enter="transition duration-300 transform" x-transition:enter-start="opacity-0 translate-y-4" x-cloak
+                 x-data="{ editModalOpen: false, editFormAction: '', editTitle: '', editContent: '', editHighlight: false,
+                           openEditModal(id, title, content, highlight) {
+                               this.editFormAction = '/admin/notice/edit/' + id;
+                               this.editTitle = title;
+                               this.editContent = content;
+                               this.editHighlight = highlight;
+                               this.editModalOpen = true;
+                           }
+                 }">
+                <div class="mb-10">
+                    <h1 class="text-3xl font-extrabold text-slate-900">Manage Notices</h1>
+                    <p class="text-slate-500">Post and update announcements.</p>
+                </div>
 
-        <div class="flex items-center">
-            <input type="checkbox" name="is_highlight" id="highlight" class="h-4 w-4 text-red-600 border-gray-300 rounded focus:ring-red-500">
-            <label for="highlight" class="ml-2 block text-sm text-gray-900 font-medium">Mark as Highlight / Important</label>
-        </div>
-        <button type="submit" class="bg-blue-600 text-white px-6 py-2 rounded shadow hover:bg-blue-700 transition">Publish Notice</button>
-    </form>
-</div>
+                <div class="bg-white p-8 rounded-2xl shadow-sm border border-slate-100 mb-10">
+                    <h2 class="text-lg font-bold text-slate-900 mb-6">Create New Notice</h2>
+                    <form action="/admin/notice/add" method="POST" enctype="multipart/form-data" class="space-y-6">
+                        <div>
+                            <label class="block text-xs font-bold text-slate-500 uppercase mb-2">Title</label>
+                            <input type="text" name="title" required class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold text-slate-500 uppercase mb-2">Content</label>
+                            <textarea name="content" rows="3" required class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none resize-none"></textarea>
+                        </div>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 items-center">
+                            <div>
+                                <label class="block text-xs font-bold text-slate-500 uppercase mb-2">PDF Attachment</label>
+                                <input type="file" name="pdf_file" accept=".pdf" class="w-full text-sm text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-xs file:font-bold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100 cursor-pointer">
+                            </div>
+                            <div class="flex items-center gap-3">
+                                <input type="checkbox" name="is_highlight" id="highlight" class="w-5 h-5 text-blue-600 border-slate-300 rounded focus:ring-blue-500">
+                                <label for="highlight" class="text-sm font-bold text-slate-700">Pin as Important</label>
+                            </div>
+                        </div>
+                        <button type="submit" class="bg-blue-600 text-white px-8 py-3 rounded-xl font-bold shadow-lg shadow-blue-500/30 hover:bg-blue-700 transition-all">Publish</button>
+                    </form>
+                </div>
 
-                <div class="bg-white rounded-lg shadow overflow-hidden">
-                    <table class="min-w-full divide-y divide-gray-200">
-                        <thead class="bg-gray-50">
-                            <tr>
-                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Date</th>
-                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Title</th>
-                                <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase">Actions</th>
+                <div class="bg-white rounded-2xl shadow-sm border border-slate-100 overflow-x-auto">
+                    <table class="w-full">
+                        <thead class="bg-slate-50 border-b border-slate-100">
+                            <tr class="text-left text-[10px] font-bold text-slate-400 uppercase tracking-widest">
+                                <th class="px-6 py-4">Date</th>
+                                <th class="px-6 py-4">Title</th>
+                                <th class="px-6 py-4">Status</th>
+                                <th class="px-6 py-4 text-right">Actions</th>
                             </tr>
                         </thead>
-                        <tbody class="divide-y divide-gray-200">
+                        <tbody class="divide-y divide-slate-100">
                             {% for notice in notices %}
-                            <tr>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ notice.date_posted.strftime('%Y-%m-%d') }}</td>
-                                <td class="px-6 py-4 text-sm text-gray-900 font-medium">{{ notice.title }}</td>
-                                <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                                    <form action="/admin/notice/delete/{{ notice.id }}" method="POST" onsubmit="return confirm('Are you sure you want to delete this notice?');">
-                                        <button type="submit" class="text-red-600 hover:text-red-900">Delete</button>
+                            <tr class="hover:bg-slate-50 transition-colors">
+                                <td class="px-6 py-4 text-xs font-medium text-slate-500 whitespace-nowrap">{{ notice.date_posted.strftime('%d %b %Y') }}</td>
+                                <td class="px-6 py-4 text-sm font-bold text-slate-900">{{ notice.title }}</td>
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    {% if notice.is_highlight %}
+                                        <span class="px-2.5 py-1 bg-red-100 text-red-600 text-[10px] font-bold rounded-md uppercase tracking-wide">Important</span>
+                                    {% else %}
+                                        <span class="px-2.5 py-1 bg-slate-100 text-slate-500 text-[10px] font-bold rounded-md uppercase tracking-wide">Standard</span>
+                                    {% endif %}
+                                </td>
+                                <td class="px-6 py-4 text-right whitespace-nowrap space-x-3">
+                                    <button @click="openEditModal({{ notice.id }}, '{{ notice.title | replace("'", "\\'") }}', '{{ notice.content | replace("'", "\\'") | replace('\n', '\\n') }}', {{ 'true' if notice.is_highlight else 'false' }})" class="text-blue-600 hover:text-blue-800 font-bold text-xs uppercase tracking-wide">Edit</button>
+                                    <form action="/admin/notice/delete/{{ notice.id }}" method="POST" class="inline" onsubmit="return confirm('Delete this notice?');">
+                                        <button type="submit" class="text-red-500 hover:text-red-700 font-bold text-xs uppercase tracking-wide">Delete</button>
                                     </form>
                                 </td>
                             </tr>
+                            {% else %}
+                            <tr><td colspan="4" class="px-6 py-8 text-center text-slate-400 text-sm">No notices available.</td></tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+
+                <div x-show="editModalOpen" class="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm transition-opacity" x-cloak>
+                    <div @click.away="editModalOpen = false" class="bg-white rounded-2xl shadow-2xl w-full max-w-2xl overflow-hidden transform transition-all">
+                        <div class="p-6 border-b border-slate-100 flex justify-between items-center">
+                            <h2 class="text-xl font-bold text-slate-900">Edit Notice</h2>
+                            <button @click="editModalOpen = false" class="text-slate-400 hover:text-slate-600"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg></button>
+                        </div>
+                        <form :action="editFormAction" method="POST" class="p-6 space-y-4">
+                            <div>
+                                <label class="block text-xs font-bold text-slate-500 uppercase mb-2">Notice Title</label>
+                                <input type="text" name="title" x-model="editTitle" required class="w-full px-4 py-2 border border-slate-300 rounded-lg outline-none focus:ring-2 focus:ring-blue-500">
+                            </div>
+                            <div>
+                                <label class="block text-xs font-bold text-slate-500 uppercase mb-2">Content</label>
+                                <textarea name="content" rows="5" x-model="editContent" required class="w-full px-4 py-2 border border-slate-300 rounded-lg outline-none focus:ring-2 focus:ring-blue-500 resize-none"></textarea>
+                            </div>
+                            <div class="flex items-center gap-3">
+                                <input type="checkbox" name="is_highlight" id="edit_highlight" x-model="editHighlight" class="w-4 h-4 text-red-600 border-slate-300 rounded">
+                                <label for="edit_highlight" class="text-sm font-bold text-slate-700">Mark as Important</label>
+                            </div>
+                            <div class="pt-4 flex justify-end space-x-3">
+                                <button type="button" @click="editModalOpen = false" class="px-5 py-2 bg-slate-100 text-slate-600 font-bold rounded-lg hover:bg-slate-200 transition-colors">Cancel</button>
+                                <button type="submit" class="px-5 py-2 bg-blue-600 text-white font-bold rounded-lg hover:bg-blue-700 transition-colors shadow-md">Save Changes</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <div x-show="activeTab === 'faculty'" x-transition:enter="transition duration-300 transform" x-transition:enter-start="opacity-0 translate-y-4" x-cloak>
+                <div class="mb-10">
+                    <h1 class="text-3xl font-extrabold text-slate-900">Faculty Directory</h1>
+                    <p class="text-slate-500">Add or remove department teaching staff.</p>
+                </div>
+
+                <div class="bg-white p-8 rounded-2xl shadow-sm border border-slate-100 mb-10">
+                    <h2 class="text-lg font-bold text-slate-900 mb-6">Add Faculty Member</h2>
+                    <form action="/admin/faculty/add" method="POST" enctype="multipart/form-data" class="space-y-6">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div>
+                                <label class="block text-xs font-bold text-slate-500 uppercase mb-2">Full Name</label>
+                                <input type="text" name="name" required class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl outline-none focus:ring-2 focus:ring-blue-500">
+                            </div>
+                            <div>
+                                <label class="block text-xs font-bold text-slate-500 uppercase mb-2">Designation</label>
+                                <input type="text" name="designation" required class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl outline-none focus:ring-2 focus:ring-blue-500">
+                            </div>
+                            <div>
+                                <label class="block text-xs font-bold text-slate-500 uppercase mb-2">Email</label>
+                                <input type="email" name="email" required class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl outline-none focus:ring-2 focus:ring-blue-500">
+                            </div>
+                            <div>
+                                <label class="block text-xs font-bold text-slate-500 uppercase mb-2">Specialization</label>
+                                <input type="text" name="specialization" class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl outline-none focus:ring-2 focus:ring-blue-500">
+                            </div>
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold text-slate-500 uppercase mb-2">Profile Photo</label>
+                            <input type="file" name="image" accept="image/*" class="w-full text-sm text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-xs file:font-bold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100 cursor-pointer">
+                        </div>
+                        <button type="submit" class="bg-slate-900 text-white px-8 py-3 rounded-xl font-bold hover:bg-black transition-all">Add Member</button>
+                    </form>
+                </div>
+
+                <div class="bg-white rounded-2xl shadow-sm border border-slate-100 overflow-x-auto">
+                    <table class="w-full text-left">
+                        <thead class="bg-slate-50 border-b border-slate-100">
+                            <tr class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">
+                                <th class="px-6 py-4">Profile</th>
+                                <th class="px-6 py-4">Designation</th>
+                                <th class="px-6 py-4">Specialization</th>
+                                <th class="px-6 py-4 text-right">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-slate-100">
+                            {% for member in faculty %}
+                            <tr class="hover:bg-slate-50/50 transition-colors">
+                                <td class="px-6 py-4 flex items-center gap-4">
+                                    <div class="w-10 h-10 rounded-full bg-blue-100 border border-slate-200 flex items-center justify-center font-bold text-blue-600 uppercase text-xs overflow-hidden shrink-0">
+                                        {% if member.image_path %}
+                                            <img src="{{ url_for('static', filename='uploads/' + member.image_path) }}" class="w-full h-full object-cover">
+                                        {% else %}
+                                            {{ member.name[0] }}
+                                        {% endif %}
+                                    </div>
+                                    <div class="min-w-0">
+                                        <div class="text-sm font-bold text-slate-900 truncate">{{ member.name }}</div>
+                                        <div class="text-xs text-slate-500 truncate">{{ member.email }}</div>
+                                    </div>
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    <span class="px-2.5 py-1 bg-slate-100 text-slate-700 text-[10px] font-bold rounded-md">{{ member.designation }}</span>
+                                </td>
+                                <td class="px-6 py-4 text-xs text-slate-500 truncate max-w-xs">{{ member.specialization }}</td>
+                                <td class="px-6 py-4 text-right whitespace-nowrap">
+                                    <form action="/admin/faculty/delete/{{ member.id }}" method="POST" onsubmit="return confirm('Remove this faculty member?');">
+                                        <button type="submit" class="text-red-500 hover:text-red-700 font-bold text-xs uppercase tracking-widest">Remove</button>
+                                    </form>
+                                </td>
+                            </tr>
+                            {% else %}
+                            <tr><td colspan="4" class="px-6 py-8 text-center text-slate-400 text-sm">No faculty profiles found.</td></tr>
                             {% endfor %}
                         </tbody>
                     </table>
                 </div>
             </div>
 
-            <div x-show="activeTab === 'faculty'" x-transition style="display: none;">
-    <h1 class="text-3xl font-bold mb-6">Manage Faculty</h1>
-    
-    <div class="bg-white p-6 rounded-lg shadow mb-8 border border-gray-200">
-        <h2 class="text-xl font-semibold mb-4 border-b pb-2 text-blue-900">Add New Faculty Member</h2>
-        <form action="/admin/faculty/add" method="POST" class="space-y-4">
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div>
-                    <label class="block text-sm font-medium text-gray-700">Full Name</label>
-                    <input type="text" name="name" required placeholder="e.g. Dr. Jane Doe" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 focus:ring-blue-500 focus:border-blue-500">
+            <div x-show="activeTab === 'courses'" x-transition:enter="transition duration-300 transform" x-transition:enter-start="opacity-0 translate-y-4" x-cloak>
+                <div class="mb-10">
+                    <h1 class="text-3xl font-extrabold text-slate-900">Manage Courses</h1>
+                    <p class="text-slate-500">Update curriculum and assign professors.</p>
                 </div>
-                <div>
-                    <label class="block text-sm font-medium text-gray-700">Designation</label>
-                    <input type="text" name="designation" required placeholder="e.g. Assistant Professor" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 focus:ring-blue-500 focus:border-blue-500">
-                </div>
-                <div>
-                    <label class="block text-sm font-medium text-gray-700">Email Address</label>
-                    <input type="email" name="email" required placeholder="e.g. faculty@college.edu" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 focus:ring-blue-500 focus:border-blue-500">
-                </div>
-                <div>
-                    <label class="block text-sm font-medium text-gray-700">Specialization</label>
-                    <input type="text" name="specialization" placeholder="e.g. Artificial Intelligence" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 focus:ring-blue-500 focus:border-blue-500">
-                </div>
-            </div>
-            <form action="/admin/faculty/add" method="POST" enctype="multipart/form-data" class="space-y-4">
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <div class="md:col-span-2">
-            <label class="block text-sm font-medium text-gray-700">Profile Photo</label>
-            <input type="file" name="image" accept="image/*" class="mt-1 block w-full border border-gray-300 rounded-md p-2">
-        </div>
-    </div>
-    <div class="pt-2">
-        <button type="submit" class="bg-blue-600 text-white px-6 py-2 rounded shadow hover:bg-blue-700 transition">Add Faculty</button>
-    </div>
-</form>
-        </form>
-    </div>
 
-    <div class="bg-white rounded-lg shadow overflow-hidden border border-gray-200">
-        <table class="min-w-full divide-y divide-gray-200">
-            <thead class="bg-gray-50">
-                <tr>
-                    <th class="px-6 py-3 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">Name & Contact</th>
-                    <th class="px-6 py-3 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">Designation</th>
-                    <th class="px-6 py-3 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">Specialization</th>
-                    <th class="px-6 py-3 text-right text-xs font-bold text-gray-500 uppercase tracking-wider">Actions</th>
-                </tr>
-            </thead>
-            <tbody class="divide-y divide-gray-200">
-                {% for member in faculty %}
-                <tr class="hover:bg-gray-50 transition">
-                    <td class="px-6 py-4 whitespace-nowrap">
-                        <div class="text-sm font-bold text-gray-900">{{ member.name }}</div>
-                        <div class="text-sm text-blue-600">{{ member.email }}</div>
-                    </td>
-                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">{{ member.designation }}</td>
-                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ member.specialization }}</td>
-                    <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                        <form action="/admin/faculty/delete/{{ member.id }}" method="POST" onsubmit="return confirm('Are you sure you want to remove this faculty member?');">
-                            <button type="submit" class="text-red-600 hover:text-red-900 font-semibold">Remove</button>
-                        </form>
-                    </td>
-                </tr>
-                {% else %}
-                <tr>
-                    <td colspan="4" class="px-6 py-8 text-center text-gray-500 italic">No faculty members found. Add one above!</td>
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
-    </div>
-</div>
-
-                <div x-show="activeTab === 'settings'" x-transition style="display: none;">
-    <h1 class="text-3xl font-bold mb-6">Manage Department Information</h1>
-
-    <form action="/admin/settings/update" method="POST" class="bg-white p-6 rounded-lg shadow space-y-6">
-
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div class="col-span-2">
-                <label class="block text-sm font-medium text-gray-700 mb-1">About Department</label>
-                <textarea name="about_text" rows="4" class="w-full border border-gray-300 rounded-md shadow-sm p-2">{{ info.about_text }}</textarea>
-            </div>
-            <div>
-                <label class="block text-sm font-medium text-gray-700 mb-1">Vision</label>
-                <textarea name="vision" rows="3" class="w-full border border-gray-300 rounded-md shadow-sm p-2">{{ info.vision }}</textarea>
-            </div>
-            <div>
-                <label class="block text-sm font-medium text-gray-700 mb-1">Mission</label>
-                <textarea name="mission" rows="3" class="w-full border border-gray-300 rounded-md shadow-sm p-2">{{ info.mission }}</textarea>
-            </div>
-        </div>
-
-        <form action="/admin/settings/update" method="POST" enctype="multipart/form-data" class="bg-white p-6 rounded-lg shadow space-y-6">
-    <h3 class="text-xl font-semibold border-b pb-2 mt-8 mb-4">Principal Details</h3>
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <div>
-            <label class="block text-sm font-medium text-gray-700 mb-1">Principal Name</label>
-            <input type="text" name="principal_name" value="{{ info.principal_name or '' }}" class="w-full border border-gray-300 rounded-md p-2">
-            
-            <label class="block text-sm font-medium text-gray-700 mb-1 mt-4">Principal Photo</label>
-            <input type="file" name="principal_image" accept="image/*" class="w-full border border-gray-300 rounded-md p-2">
-            {% if info.principal_image %}
-                <p class="text-xs text-green-600 mt-1">✓ Photo currently uploaded</p>
-            {% endif %}
-        </div>
-        <div>
-            <label class="block text-sm font-medium text-gray-700 mb-1">Principal Message</label>
-            <textarea name="principal_message" rows="5" class="w-full border border-gray-300 rounded-md p-2">{{ info.principal_message or '' }}</textarea>
-        </div>
-    </div>
-
-    <h3 class="text-xl font-semibold border-b pb-2 mt-8 mb-4">HOD Details</h3>
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <div>
-            <label class="block text-sm font-medium text-gray-700 mb-1">HOD Name</label>
-            <input type="text" name="hod_name" value="{{ info.hod_name or '' }}" class="w-full border border-gray-300 rounded-md p-2">
-            
-            <label class="block text-sm font-medium text-gray-700 mb-1 mt-4">HOD Photo</label>
-            <input type="file" name="hod_image" accept="image/*" class="w-full border border-gray-300 rounded-md p-2">
-            {% if info.hod_image %}
-                <p class="text-xs text-green-600 mt-1">✓ Photo currently uploaded</p>
-            {% endif %}
-        </div>
-        <div>
-            <label class="block text-sm font-medium text-gray-700 mb-1">HOD Message</label>
-            <textarea name="hod_message" rows="5" class="w-full border border-gray-300 rounded-md p-2">{{ info.hod_message or '' }}</textarea>
-        </div>
-    </div>
-
-        <h3 class="text-xl font-semibold border-b pb-2 mt-8 mb-4">Contact Information</h3>
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div>
-                <label class="block text-sm font-medium text-gray-700 mb-1">Contact Email</label>
-                <input type="email" name="contact_email" value="{{ info.contact_email }}" class="w-full border border-gray-300 rounded-md shadow-sm p-2">
-            </div>
-            <div>
-                <label class="block text-sm font-medium text-gray-700 mb-1">Contact Phone</label>
-                <input type="text" name="contact_phone" value="{{ info.contact_phone }}" class="w-full border border-gray-300 rounded-md shadow-sm p-2">
-            </div>
-            <div class="col-span-2">
-                <label class="block text-sm font-medium text-gray-700 mb-1">Physical Address</label>
-                <textarea name="address" rows="3" class="w-full border border-gray-300 rounded-md shadow-sm p-2">{{ info.address }}</textarea>
-            </div>
-        </div>
-
-        <div class="pt-4 border-t border-gray-200 flex justify-end">
-            <button type="submit" class="bg-green-600 text-white px-6 py-2 rounded shadow hover:bg-green-700">Save Changes</button>
-        </div>
-    </form>
-</div>
-
-<div x-show="activeTab === 'gallery'" x-transition style="display: none;">
-    <h1 class="text-3xl font-bold mb-6">Manage Gallery</h1>
-    
-    <div class="bg-white p-6 rounded-lg shadow mb-8" x-data="{ type: 'image' }">
-        <h2 class="text-xl font-semibold mb-4 border-b pb-2">Add New Media</h2>
-        <form action="/admin/gallery/add" method="POST" enctype="multipart/form-data" class="space-y-4">
-            
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div>
-                    <label class="block text-sm font-medium text-gray-700">Title / Caption</label>
-                    <input type="text" name="title" required class="mt-1 block w-full border border-gray-300 rounded-md p-2">
-                </div>
-                <div>
-                    <label class="block text-sm font-medium text-gray-700">Media Type</label>
-                    <select name="media_type" x-model="type" class="mt-1 block w-full border border-gray-300 rounded-md p-2">
-                        <option value="image">Photo Upload</option>
-                        <option value="video">YouTube Video Link</option>
-                    </select>
-                </div>
-            </div>
-
-            <div x-show="type === 'image'">
-                <label class="block text-sm font-medium text-gray-700">Upload Image</label>
-                <input type="file" name="file" accept="image/*" class="mt-1 block w-full border border-gray-300 rounded-md p-2">
-            </div>
-
-            <div x-show="type === 'video'" style="display: none;">
-                <label class="block text-sm font-medium text-gray-700">YouTube URL</label>
-                <input type="url" name="video_url" placeholder="https://www.youtube.com/watch?v=..." class="mt-1 block w-full border border-gray-300 rounded-md p-2">
-            </div>
-
-            <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded shadow hover:bg-blue-700">Add to Gallery</button>
-        </form>
-    </div>
-
-    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-        {% for item in gallery_items %}
-        <div class="bg-white rounded-lg shadow overflow-hidden border border-gray-200">
-            {% if item.media_type == 'image' %}
-                <img src="{{ url_for('static', filename='uploads/' + item.file_path) }}" alt="{{ item.title }}" class="w-full h-40 object-cover">
-            {% elif item.media_type == 'video' %}
-                <iframe class="w-full h-40" src="{{ item.file_path }}" frameborder="0" allowfullscreen></iframe>
-            {% endif %}
-            <div class="p-3 flex justify-between items-center">
-                <span class="text-sm font-medium text-gray-900 truncate pr-2">{{ item.title }}</span>
-                <form action="/admin/gallery/delete/{{ item.id }}" method="POST" onsubmit="return confirm('Delete this media?');">
-                    <button type="submit" class="text-red-600 hover:text-red-800 text-xs">Delete</button>
-                </form>
-            </div>
-        </div>
-        {% endfor %}
-    </div>
-</div>
-<div x-show="activeTab === 'courses'" x-transition style="display: none;">
-    <h1 class="text-3xl font-bold mb-6">Manage Courses & Syllabus</h1>
-    
-    <div class="bg-white p-6 rounded-lg shadow mb-8">
-        <h2 class="text-xl font-semibold mb-4 border-b pb-2">Add New Course</h2>
-        <form action="/admin/course/add" method="POST" class="space-y-4">
-            <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
-                <div class="col-span-1">
-                    <label class="block text-sm font-medium text-gray-700">Course Code</label>
-                    <input type="text" name="course_code" placeholder="CS101" required class="mt-1 block w-full border border-gray-300 rounded-md p-2 shadow-sm">
-                </div>
-                <div class="col-span-3">
-                    <label class="block text-sm font-medium text-gray-700">Course Title</label>
-                    <input type="text" name="title" placeholder="Data Structures" required class="mt-1 block w-full border border-gray-300 rounded-md p-2 shadow-sm">
-                </div>
-            </div>
-            
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                <div>
-                    <label class="block text-sm font-medium text-gray-700">Semester</label>
-                    <input type="number" name="semester" min="1" max="8" required class="mt-1 block w-full border border-gray-300 rounded-md p-2 shadow-sm">
-                </div>
-                <div>
-                    <label class="block text-sm font-medium text-gray-700">Credits</label>
-                    <input type="number" name="credits" min="1" max="5" required class="mt-1 block w-full border border-gray-300 rounded-md p-2 shadow-sm">
-                </div>
-                <div>
-                    <label class="block text-sm font-medium text-gray-700">Assign Professor</label>
-                    <select name="faculty_id" class="mt-1 block w-full border border-gray-300 rounded-md p-2 shadow-sm">
-                        <option value="">-- Unassigned --</option>
-                        {% for f in faculty %}
-                            <option value="{{ f.id }}">{{ f.name }} ({{ f.designation }})</option>
-                        {% endfor %}
-                    </select>
-                </div>
-            </div>
-            <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded shadow hover:bg-blue-700">Add Course</button>
-        </form>
-    </div>
-
-    <div class="bg-white rounded-lg shadow overflow-hidden">
-        <table class="min-w-full divide-y divide-gray-200">
-            <thead class="bg-gray-50">
-                <tr>
-                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Sem</th>
-                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Code</th>
-                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Title</th>
-                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Professor</th>
-                    <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase">Actions</th>
-                </tr>
-            </thead>
-            <tbody class="divide-y divide-gray-200">
-                {% for course in courses %}
-                <tr class="hover:bg-gray-50">
-                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 font-bold">{{ course.semester }}</td>
-                    <td class="px-6 py-4 whitespace-nowrap text-sm text-blue-600 font-mono">{{ course.course_code }}</td>
-                    <td class="px-6 py-4 text-sm text-gray-900">{{ course.title }} ({{ course.credits }} Cr)</td>
-                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                        {% if course.professor %}
-                            {{ course.professor.name }}
-                        {% else %}
-                            <span class="text-red-400 italic">TBA</span>
-                        {% endif %}
-                    </td>
-                    <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                        <form action="/admin/course/delete/{{ course.id }}" method="POST" onsubmit="return confirm('Delete this course?');">
-                            <button type="submit" class="text-red-600 hover:text-red-900">Delete</button>
-                        </form>
-                    </td>
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
-    </div>
-</div>
-
-<div x-show="activeTab === 'notices'" x-transition style="display: none;" 
-     x-data="{ 
-        editModalOpen: false, 
-        editFormAction: '', 
-        editTitle: '', 
-        editContent: '', 
-        editHighlight: false,
-        openEditModal(id, title, content, highlight) {
-            this.editFormAction = '/admin/notice/edit/' + id;
-            this.editTitle = title;
-            this.editContent = content;
-            this.editHighlight = highlight;
-            this.editModalOpen = true;
-        }
-     }">
-    
-   
-
-    <div class="bg-white rounded-lg shadow overflow-hidden border border-gray-200">
-        <table class="min-w-full divide-y divide-gray-200">
-            <thead class="bg-gray-50">
-                <tr>
-                    <th class="px-6 py-3 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">Date</th>
-                    <th class="px-6 py-3 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">Title</th>
-                    <th class="px-6 py-3 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">Status</th>
-                    <th class="px-6 py-3 text-right text-xs font-bold text-gray-500 uppercase tracking-wider">Actions</th>
-                </tr>
-            </thead>
-            <tbody class="bg-white divide-y divide-gray-200">
-                {% for notice in notices %}
-                <tr class="hover:bg-gray-50 transition">
-                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ notice.date_posted.strftime('%d %b %Y') }}</td>
-                    <td class="px-6 py-4 text-sm text-gray-900 font-medium">{{ notice.title }}</td>
-                    <td class="px-6 py-4 whitespace-nowrap text-sm">
-                        {% if notice.is_highlight %}
-                            <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-red-100 text-red-800">Highlighted</span>
-                        {% else %}
-                            <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-gray-100 text-gray-800">Standard</span>
-                        {% endif %}
-                    </td>
-                    <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                        <button type="button" 
-                                @click="openEditModal({{ notice.id }}, '{{ notice.title | replace("'", "\\'") }}', '{{ notice.content | replace("'", "\\'") | replace('\n', '\\n') }}', {{ 'true' if notice.is_highlight else 'false' }})" 
-                                class="text-indigo-600 hover:text-indigo-900 mr-4">Edit</button>
-                        
-                        <form action="/admin/notice/delete/{{ notice.id }}" method="POST" class="inline-block" onsubmit="return confirm('Are you sure you want to delete this notice forever?');">
-                            <button type="submit" class="text-red-600 hover:text-red-900">Delete</button>
-                        </form>
-                    </td>
-                </tr>
-                {% else %}
-                <tr>
-                    <td colspan="4" class="px-6 py-8 text-center text-gray-500 italic">No notices found. Create one above!</td>
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
-    </div>
-
-    <div x-show="editModalOpen" class="fixed inset-0 z-50 flex items-center justify-center bg-gray-900 bg-opacity-75 transition-opacity" x-cloak>
-        <div @click.away="editModalOpen = false" class="bg-white rounded-xl shadow-2xl w-full max-w-2xl p-6 relative transform transition-all">
-            
-            <button @click="editModalOpen = false" class="absolute top-4 right-4 text-gray-400 hover:text-gray-600">
-                <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
-            </button>
-            
-            <h2 class="text-2xl font-bold text-gray-900 mb-6">Edit Notice</h2>
-            
-            <form :action="editFormAction" method="POST" class="space-y-4">
-                <div>
-                    <label class="block text-sm font-medium text-gray-700">Notice Title</label>
-                    <input type="text" name="title" x-model="editTitle" required class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 focus:ring-indigo-500 focus:border-indigo-500">
-                </div>
-                <div>
-                    <label class="block text-sm font-medium text-gray-700">Notice Content</label>
-                    <textarea name="content" rows="5" x-model="editContent" required class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 focus:ring-indigo-500 focus:border-indigo-500"></textarea>
-                </div>
-                <div class="flex items-center">
-                    <input type="checkbox" name="is_highlight" id="edit_highlight" x-model="editHighlight" class="h-4 w-4 text-red-600 border-gray-300 rounded focus:ring-red-500">
-                    <label for="edit_highlight" class="ml-2 block text-sm text-gray-900 font-medium">Mark as Highlight / Important</label>
-                </div>
-                <div class="pt-4 flex justify-end space-x-3 border-t border-gray-200 mt-6">
-                    <button type="button" @click="editModalOpen = false" class="bg-gray-200 text-gray-700 px-4 py-2 rounded hover:bg-gray-300 transition">Cancel</button>
-                    <button type="submit" class="bg-indigo-600 text-white px-6 py-2 rounded shadow hover:bg-indigo-700 transition">Save Changes</button>
-                </div>
-            </form>
-        </div>
-    </div>
-</div>
-<div x-show="activeTab === 'events'" x-transition style="display: none;" 
-     x-data="{ 
-        editModalOpen: false, 
-        editFormAction: '', 
-        editTitle: '', 
-        editDate: '', 
-        editLocation: '', 
-        editDescription: '',
-        openEditModal(id, title, date, location, description) {
-            this.editFormAction = '/admin/event/edit/' + id;
-            this.editTitle = title;
-            this.editDate = date;
-            this.editLocation = location;
-            this.editDescription = description;
-            this.editModalOpen = true;
-        }
-     }">
-    
-    <h1 class="text-3xl font-bold mb-6">Manage Events & Workshops</h1>
-    
-    <div class="bg-white p-6 rounded-lg shadow mb-8 border border-gray-200">
-        <h2 class="text-xl font-semibold mb-4 border-b pb-2 text-blue-900">Schedule New Event</h2>
-        <form action="/admin/event/add" method="POST" class="space-y-4">
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div>
-                    <label class="block text-sm font-medium text-gray-700">Event Title</label>
-                    <input type="text" name="title" required placeholder="e.g. Annual Tech Fest" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 focus:ring-blue-500 focus:border-blue-500">
-                </div>
-                <div>
-                    <label class="block text-sm font-medium text-gray-700">Date & Time</label>
-                    <input type="datetime-local" name="event_date" required class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 focus:ring-blue-500 focus:border-blue-500">
-                </div>
-                <div class="md:col-span-2">
-                    <label class="block text-sm font-medium text-gray-700">Location / Venue</label>
-                    <input type="text" name="location" placeholder="e.g. Main Auditorium" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 focus:ring-blue-500 focus:border-blue-500">
-                </div>
-                <div class="md:col-span-2">
-                    <label class="block text-sm font-medium text-gray-700">Event Description</label>
-                    <textarea name="description" rows="3" required class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 focus:ring-blue-500 focus:border-blue-500"></textarea>
-                </div>
-            </div>
-            <button type="submit" class="mt-4 bg-blue-600 text-white px-6 py-2 rounded shadow hover:bg-blue-700 transition">Add Event</button>
-        </form>
-    </div>
-
-    <div class="bg-white rounded-lg shadow overflow-hidden border border-gray-200">
-        <table class="min-w-full divide-y divide-gray-200">
-            <thead class="bg-gray-50">
-                <tr>
-                    <th class="px-6 py-3 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">Date & Time</th>
-                    <th class="px-6 py-3 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">Event Details</th>
-                    <th class="px-6 py-3 text-right text-xs font-bold text-gray-500 uppercase tracking-wider">Actions</th>
-                </tr>
-            </thead>
-            <tbody class="bg-white divide-y divide-gray-200">
-                {% for event in events %}
-                <tr class="hover:bg-gray-50 transition">
-                    <td class="px-6 py-4 whitespace-nowrap">
-                        <div class="text-sm font-bold text-gray-900">{{ event.event_date.strftime('%b %d, %Y') }}</div>
-                        <div class="text-sm text-blue-600">{{ event.event_date.strftime('%I:%M %p') }}</div>
-                    </td>
-                    <td class="px-6 py-4">
-                        <div class="text-sm font-bold text-gray-900">{{ event.title }}</div>
-                        <div class="text-sm text-gray-500 flex items-center mt-1">
-                            <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
-                            {{ event.location }}
+                <div class="bg-white p-8 rounded-2xl shadow-sm border border-slate-100 mb-10">
+                    <h2 class="text-lg font-bold text-slate-900 mb-6">Add New Course</h2>
+                    <form action="/admin/course/add" method="POST" class="space-y-6">
+                        <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
+                            <div class="col-span-1">
+                                <label class="block text-xs font-bold text-slate-500 uppercase mb-2">Code</label>
+                                <input type="text" name="course_code" placeholder="CS101" required class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl outline-none focus:ring-2 focus:ring-blue-500 font-mono">
+                            </div>
+                            <div class="col-span-3">
+                                <label class="block text-xs font-bold text-slate-500 uppercase mb-2">Course Title</label>
+                                <input type="text" name="title" required class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl outline-none focus:ring-2 focus:ring-blue-500">
+                            </div>
                         </div>
-                    </td>
-                    <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                        <button type="button" 
-                                @click="openEditModal({{ event.id }}, '{{ event.title | replace("'", "\\'") }}', '{{ event.event_date.strftime('%Y-%m-%dT%H:%M') }}', '{{ event.location | replace("'", "\\'") }}', '{{ event.description | replace("'", "\\'") | replace('\n', '\\n') }}')" 
-                                class="text-indigo-600 hover:text-indigo-900 mr-4">Edit</button>
-                        
-                        <form action="/admin/event/delete/{{ event.id }}" method="POST" class="inline-block" onsubmit="return confirm('Delete this event?');">
-                            <button type="submit" class="text-red-600 hover:text-red-900">Delete</button>
-                        </form>
-                    </td>
-                </tr>
-                {% else %}
-                <tr>
-                    <td colspan="3" class="px-6 py-8 text-center text-gray-500 italic">No events scheduled. Add one above!</td>
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
-    </div>
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                            <div>
+                                <label class="block text-xs font-bold text-slate-500 uppercase mb-2">Semester</label>
+                                <input type="number" name="semester" min="1" max="8" required class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl outline-none focus:ring-2 focus:ring-blue-500">
+                            </div>
+                            <div>
+                                <label class="block text-xs font-bold text-slate-500 uppercase mb-2">Credits</label>
+                                <input type="number" name="credits" min="1" max="6" required class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl outline-none focus:ring-2 focus:ring-blue-500">
+                            </div>
+                            <div>
+                                <label class="block text-xs font-bold text-slate-500 uppercase mb-2">Instructor</label>
+                                <select name="faculty_id" class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl outline-none focus:ring-2 focus:ring-blue-500 text-sm">
+                                    <option value="">-- TBA --</option>
+                                    {% for f in faculty %}
+                                        <option value="{{ f.id }}">{{ f.name }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        </div>
+                        <button type="submit" class="bg-blue-600 text-white px-8 py-3 rounded-xl font-bold shadow-lg shadow-blue-500/30 hover:bg-blue-700 transition-all">Add Course</button>
+                    </form>
+                </div>
 
-    <div x-show="editModalOpen" class="fixed inset-0 z-50 flex items-center justify-center bg-gray-900 bg-opacity-75 transition-opacity" x-cloak>
-        <div @click.away="editModalOpen = false" class="bg-white rounded-xl shadow-2xl w-full max-w-2xl p-6 relative transform transition-all">
-            <button @click="editModalOpen = false" class="absolute top-4 right-4 text-gray-400 hover:text-gray-600">
-                <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
-            </button>
-            <h2 class="text-2xl font-bold text-gray-900 mb-6">Edit Event</h2>
-            
-            <form :action="editFormAction" method="POST" class="space-y-4">
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700">Event Title</label>
-                        <input type="text" name="title" x-model="editTitle" required class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 focus:ring-indigo-500 focus:border-indigo-500">
-                    </div>
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700">Date & Time</label>
-                        <input type="datetime-local" name="event_date" x-model="editDate" required class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 focus:ring-indigo-500 focus:border-indigo-500">
-                    </div>
-                    <div class="md:col-span-2">
-                        <label class="block text-sm font-medium text-gray-700">Location / Venue</label>
-                        <input type="text" name="location" x-model="editLocation" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 focus:ring-indigo-500 focus:border-indigo-500">
-                    </div>
-                    <div class="md:col-span-2">
-                        <label class="block text-sm font-medium text-gray-700">Event Description</label>
-                        <textarea name="description" rows="4" x-model="editDescription" required class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 focus:ring-indigo-500 focus:border-indigo-500"></textarea>
-                    </div>
-                </div>
-                <div class="pt-4 flex justify-end space-x-3 border-t border-gray-200 mt-6">
-                    <button type="button" @click="editModalOpen = false" class="bg-gray-200 text-gray-700 px-4 py-2 rounded hover:bg-gray-300 transition">Cancel</button>
-                    <button type="submit" class="bg-indigo-600 text-white px-6 py-2 rounded shadow hover:bg-indigo-700 transition">Save Changes</button>
-                </div>
-            </form>
-        </div>
-    </div>
-</div>
-
-<div x-show="activeTab === 'banners'" x-transition style="display: none;">
-    <h1 class="text-3xl font-bold mb-6">Manage Homepage Banners</h1>
-    
-    <div class="bg-white p-6 rounded-lg shadow mb-8 border border-gray-200">
-        <h2 class="text-xl font-semibold mb-4 border-b pb-2 text-blue-900">Upload New Banner</h2>
-        <form action="/admin/banner/add" method="POST" enctype="multipart/form-data" class="space-y-4">
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div>
-                    <label class="block text-sm font-medium text-gray-700">Main Heading</label>
-                    <input type="text" name="heading" placeholder="e.g. Welcome to CSE" class="mt-1 block w-full border border-gray-300 rounded-md p-2">
-                </div>
-                <div>
-                    <label class="block text-sm font-medium text-gray-700">Subheading / Description</label>
-                    <input type="text" name="subheading" placeholder="A short descriptive text..." class="mt-1 block w-full border border-gray-300 rounded-md p-2">
-                </div>
-                <div class="md:col-span-2">
-                    <label class="block text-sm font-medium text-gray-700">Banner Image (High Resolution Recommended)</label>
-                    <input type="file" name="file" accept="image/*" required class="mt-1 block w-full border border-gray-300 rounded-md p-2">
+                <div class="bg-white rounded-2xl shadow-sm border border-slate-100 overflow-x-auto">
+                    <table class="w-full">
+                        <thead class="bg-slate-50 border-b border-slate-100">
+                            <tr class="text-left text-[10px] font-bold text-slate-400 uppercase tracking-widest">
+                                <th class="px-6 py-4">Sem</th>
+                                <th class="px-6 py-4">Code</th>
+                                <th class="px-6 py-4">Title</th>
+                                <th class="px-6 py-4">Instructor</th>
+                                <th class="px-6 py-4 text-right">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-slate-100">
+                            {% for course in courses %}
+                            <tr class="hover:bg-slate-50 transition-colors">
+                                <td class="px-6 py-4 text-sm font-bold text-slate-900">{{ course.semester }}</td>
+                                <td class="px-6 py-4 text-sm font-mono text-blue-600 font-bold whitespace-nowrap">{{ course.course_code }}</td>
+                                <td class="px-6 py-4 text-sm text-slate-800">{{ course.title }} <span class="text-xs text-slate-400 font-bold ml-2">({{ course.credits }} Cr)</span></td>
+                                <td class="px-6 py-4 text-xs font-medium">
+                                    {% if course.professor %}
+                                        <span class="text-slate-700">{{ course.professor.name }}</span>
+                                    {% else %}
+                                        <span class="text-red-400 italic">Unassigned</span>
+                                    {% endif %}
+                                </td>
+                                <td class="px-6 py-4 text-right">
+                                    <form action="/admin/course/delete/{{ course.id }}" method="POST" onsubmit="return confirm('Delete this course?');">
+                                        <button type="submit" class="text-red-500 hover:text-red-700 font-bold text-xs uppercase tracking-widest">Delete</button>
+                                    </form>
+                                </td>
+                            </tr>
+                            {% else %}
+                            <tr><td colspan="5" class="px-6 py-8 text-center text-slate-400 text-sm">No courses available.</td></tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
                 </div>
             </div>
-            <button type="submit" class="bg-blue-600 text-white px-6 py-2 rounded shadow hover:bg-blue-700">Upload Banner</button>
-        </form>
-    </div>
 
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-        {% for banner in banners %}
-        <div class="bg-white rounded-lg shadow overflow-hidden border border-gray-200 relative group">
-            <img src="{{ url_for('static', filename='uploads/' + banner.image_path) }}" class="w-full h-48 object-cover">
-            <div class="absolute inset-0 bg-black bg-opacity-50 flex flex-col justify-center items-center opacity-0 group-hover:opacity-100 transition-opacity">
-                <h3 class="text-white font-bold text-lg text-center px-4">{{ banner.heading }}</h3>
-                <form action="/admin/banner/delete/{{ banner.id }}" method="POST" class="mt-4" onsubmit="return confirm('Delete this banner?');">
-                    <button type="submit" class="bg-red-600 text-white px-4 py-1 rounded hover:bg-red-700">Delete</button>
+            <div x-show="activeTab === 'events'" x-transition:enter="transition duration-300 transform" x-transition:enter-start="opacity-0 translate-y-4" x-cloak
+                 x-data="{ editModalOpen: false, editFormAction: '', editTitle: '', editDate: '', editLocation: '', editDescription: '',
+                           openEditModal(id, title, date, location, description) {
+                               this.editFormAction = '/admin/event/edit/' + id;
+                               this.editTitle = title;
+                               this.editDate = date;
+                               this.editLocation = location;
+                               this.editDescription = description;
+                               this.editModalOpen = true;
+                           }
+                 }">
+                <div class="mb-10">
+                    <h1 class="text-3xl font-extrabold text-slate-900">Manage Events</h1>
+                    <p class="text-slate-500">Schedule workshops and department gatherings.</p>
+                </div>
+
+                <div class="bg-white p-8 rounded-2xl shadow-sm border border-slate-100 mb-10">
+                    <h2 class="text-lg font-bold text-slate-900 mb-6">Schedule New Event</h2>
+                    <form action="/admin/event/add" method="POST" class="space-y-6">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div>
+                                <label class="block text-xs font-bold text-slate-500 uppercase mb-2">Event Title</label>
+                                <input type="text" name="title" required class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl outline-none focus:ring-2 focus:ring-blue-500">
+                            </div>
+                            <div>
+                                <label class="block text-xs font-bold text-slate-500 uppercase mb-2">Date & Time</label>
+                                <input type="datetime-local" name="event_date" required class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl outline-none focus:ring-2 focus:ring-blue-500 text-sm">
+                            </div>
+                            <div class="md:col-span-2">
+                                <label class="block text-xs font-bold text-slate-500 uppercase mb-2">Location / Venue</label>
+                                <input type="text" name="location" class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl outline-none focus:ring-2 focus:ring-blue-500">
+                            </div>
+                            <div class="md:col-span-2">
+                                <label class="block text-xs font-bold text-slate-500 uppercase mb-2">Description</label>
+                                <textarea name="description" rows="3" required class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl outline-none focus:ring-2 focus:ring-blue-500 resize-none"></textarea>
+                            </div>
+                        </div>
+                        <button type="submit" class="bg-blue-600 text-white px-8 py-3 rounded-xl font-bold shadow-lg shadow-blue-500/30 hover:bg-blue-700 transition-all">Add Event</button>
+                    </form>
+                </div>
+
+                <div class="bg-white rounded-2xl shadow-sm border border-slate-100 overflow-x-auto">
+                    <table class="w-full">
+                        <thead class="bg-slate-50 border-b border-slate-100">
+                            <tr class="text-left text-[10px] font-bold text-slate-400 uppercase tracking-widest">
+                                <th class="px-6 py-4">Date/Time</th>
+                                <th class="px-6 py-4">Event Details</th>
+                                <th class="px-6 py-4 text-right">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-slate-100">
+                            {% for event in events %}
+                            <tr class="hover:bg-slate-50 transition-colors">
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    <div class="text-sm font-bold text-slate-900">{{ event.event_date.strftime('%b %d, %Y') }}</div>
+                                    <div class="text-xs font-medium text-blue-600">{{ event.event_date.strftime('%I:%M %p') }}</div>
+                                </td>
+                                <td class="px-6 py-4">
+                                    <div class="text-sm font-bold text-slate-900">{{ event.title }}</div>
+                                    <div class="text-xs text-slate-500 flex items-center mt-1">
+                                        <svg class="w-3 h-3 mr-1 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+                                        {{ event.location }}
+                                    </div>
+                                </td>
+                                <td class="px-6 py-4 text-right whitespace-nowrap space-x-3">
+                                    <button @click="openEditModal({{ event.id }}, '{{ event.title | replace("'", "\\'") }}', '{{ event.event_date.strftime('%Y-%m-%dT%H:%M') }}', '{{ event.location | replace("'", "\\'") }}', '{{ event.description | replace("'", "\\'") | replace('\n', '\\n') }}')" class="text-blue-600 hover:text-blue-800 font-bold text-xs uppercase tracking-wide">Edit</button>
+                                    <form action="/admin/event/delete/{{ event.id }}" method="POST" class="inline" onsubmit="return confirm('Delete this event?');">
+                                        <button type="submit" class="text-red-500 hover:text-red-700 font-bold text-xs uppercase tracking-wide">Delete</button>
+                                    </form>
+                                </td>
+                            </tr>
+                            {% else %}
+                            <tr><td colspan="3" class="px-6 py-8 text-center text-slate-400 text-sm">No events scheduled.</td></tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+
+                <div x-show="editModalOpen" class="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm transition-opacity" x-cloak>
+                    <div @click.away="editModalOpen = false" class="bg-white rounded-2xl shadow-2xl w-full max-w-2xl overflow-hidden transform transition-all">
+                        <div class="p-6 border-b border-slate-100 flex justify-between items-center">
+                            <h2 class="text-xl font-bold text-slate-900">Edit Event</h2>
+                            <button @click="editModalOpen = false" class="text-slate-400 hover:text-slate-600"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg></button>
+                        </div>
+                        <form :action="editFormAction" method="POST" class="p-6 space-y-4">
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div>
+                                    <label class="block text-xs font-bold text-slate-500 uppercase mb-2">Event Title</label>
+                                    <input type="text" name="title" x-model="editTitle" required class="w-full px-4 py-2 border border-slate-300 rounded-lg outline-none focus:ring-2 focus:ring-blue-500">
+                                </div>
+                                <div>
+                                    <label class="block text-xs font-bold text-slate-500 uppercase mb-2">Date & Time</label>
+                                    <input type="datetime-local" name="event_date" x-model="editDate" required class="w-full px-4 py-2 border border-slate-300 rounded-lg outline-none focus:ring-2 focus:ring-blue-500 text-sm">
+                                </div>
+                                <div class="md:col-span-2">
+                                    <label class="block text-xs font-bold text-slate-500 uppercase mb-2">Location / Venue</label>
+                                    <input type="text" name="location" x-model="editLocation" class="w-full px-4 py-2 border border-slate-300 rounded-lg outline-none focus:ring-2 focus:ring-blue-500">
+                                </div>
+                                <div class="md:col-span-2">
+                                    <label class="block text-xs font-bold text-slate-500 uppercase mb-2">Description</label>
+                                    <textarea name="description" rows="3" x-model="editDescription" required class="w-full px-4 py-2 border border-slate-300 rounded-lg outline-none focus:ring-2 focus:ring-blue-500 resize-none"></textarea>
+                                </div>
+                            </div>
+                            <div class="pt-4 flex justify-end space-x-3">
+                                <button type="button" @click="editModalOpen = false" class="px-5 py-2 bg-slate-100 text-slate-600 font-bold rounded-lg hover:bg-slate-200 transition-colors">Cancel</button>
+                                <button type="submit" class="px-5 py-2 bg-blue-600 text-white font-bold rounded-lg hover:bg-blue-700 transition-colors shadow-md">Save Changes</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <div x-show="activeTab === 'gallery'" x-transition:enter="transition duration-300 transform" x-transition:enter-start="opacity-0 translate-y-4" x-cloak>
+                <div class="mb-10">
+                    <h1 class="text-3xl font-extrabold text-slate-900">Media Gallery</h1>
+                    <p class="text-slate-500">Upload photos or embed videos for the public gallery.</p>
+                </div>
+
+                <div class="bg-white p-8 rounded-2xl shadow-sm border border-slate-100 mb-10" x-data="{ type: 'image' }">
+                    <h2 class="text-lg font-bold text-slate-900 mb-6">Add New Media</h2>
+                    <form action="/admin/gallery/add" method="POST" enctype="multipart/form-data" class="space-y-6">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div>
+                                <label class="block text-xs font-bold text-slate-500 uppercase mb-2">Title / Caption</label>
+                                <input type="text" name="title" required class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl outline-none focus:ring-2 focus:ring-blue-500">
+                            </div>
+                            <div>
+                                <label class="block text-xs font-bold text-slate-500 uppercase mb-2">Media Type</label>
+                                <select name="media_type" x-model="type" class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl outline-none focus:ring-2 focus:ring-blue-500 text-sm">
+                                    <option value="image">Photo Upload</option>
+                                    <option value="video">YouTube Video Link</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div x-show="type === 'image'" class="p-6 border-2 border-dashed border-slate-200 rounded-xl bg-slate-50">
+                            <label class="block text-xs font-bold text-slate-500 uppercase mb-2">Upload Image File</label>
+                            <input type="file" name="file" accept="image/*" class="w-full text-sm text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-xs file:font-bold file:bg-blue-600 file:text-white hover:file:bg-blue-700 cursor-pointer">
+                        </div>
+
+                        <div x-show="type === 'video'" style="display: none;" class="p-6 border border-slate-200 rounded-xl bg-slate-50">
+                            <label class="block text-xs font-bold text-slate-500 uppercase mb-2">YouTube URL</label>
+                            <input type="url" name="video_url" placeholder="https://www.youtube.com/watch?v=..." class="w-full px-4 py-3 bg-white border border-slate-200 rounded-xl outline-none focus:ring-2 focus:ring-blue-500">
+                        </div>
+
+                        <button type="submit" class="bg-blue-600 text-white px-8 py-3 rounded-xl font-bold shadow-lg shadow-blue-500/30 hover:bg-blue-700 transition-all">Add to Gallery</button>
+                    </form>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+                    {% for item in gallery_items %}
+                    <div class="bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden group relative">
+                        {% if item.media_type == 'image' %}
+                            <img src="{{ url_for('static', filename='uploads/' + item.file_path) }}" class="w-full aspect-video object-cover">
+                        {% elif item.media_type == 'video' %}
+                            <iframe class="w-full aspect-video" src="{{ item.file_path }}" frameborder="0" allowfullscreen></iframe>
+                        {% endif %}
+                        <div class="p-4">
+                            <p class="text-sm font-bold text-slate-900 truncate" title="{{ item.title }}">{{ item.title }}</p>
+                        </div>
+                        <div class="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                            <form action="/admin/gallery/delete/{{ item.id }}" method="POST" onsubmit="return confirm('Delete this media?');">
+                                <button type="submit" class="p-1.5 bg-red-500 text-white rounded-lg shadow hover:bg-red-600"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg></button>
+                            </form>
+                        </div>
+                    </div>
+                    {% else %}
+                        <p class="text-slate-400 text-sm italic col-span-full">No media in gallery.</p>
+                    {% endfor %}
+                </div>
+            </div>
+
+            <div x-show="activeTab === 'banners'" x-transition:enter="transition duration-300 transform" x-transition:enter-start="opacity-0 translate-y-4" x-cloak>
+                <div class="mb-10">
+                    <h1 class="text-3xl font-extrabold text-slate-900">Hero Banners</h1>
+                    <p class="text-slate-500">Manage the sliding images on the public homepage.</p>
+                </div>
+
+                <div class="bg-white p-8 rounded-2xl shadow-sm border border-slate-100 mb-10">
+                    <h2 class="text-lg font-bold text-slate-900 mb-6">Upload New Banner</h2>
+                    <form action="/admin/banner/add" method="POST" enctype="multipart/form-data" class="space-y-6">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div>
+                                <label class="block text-xs font-bold text-slate-500 uppercase mb-2">Main Heading</label>
+                                <input type="text" name="heading" placeholder="Welcome to CSE" class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl outline-none focus:ring-2 focus:ring-blue-500">
+                            </div>
+                            <div>
+                                <label class="block text-xs font-bold text-slate-500 uppercase mb-2">Subheading</label>
+                                <input type="text" name="subheading" placeholder="Empowering the future..." class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl outline-none focus:ring-2 focus:ring-blue-500">
+                            </div>
+                            <div class="md:col-span-2 p-6 border-2 border-dashed border-slate-200 rounded-xl bg-slate-50">
+                                <label class="block text-xs font-bold text-slate-500 uppercase mb-2">Banner Image (16:9 ratio recommended)</label>
+                                <input type="file" name="file" accept="image/*" required class="w-full text-sm text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-xs file:font-bold file:bg-slate-900 file:text-white hover:file:bg-black cursor-pointer">
+                            </div>
+                        </div>
+                        <button type="submit" class="bg-slate-900 text-white px-8 py-3 rounded-xl font-bold hover:bg-black transition-all">Upload Banner</button>
+                    </form>
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                    {% for banner in banners %}
+                    <div class="bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden relative group aspect-video">
+                        <img src="{{ url_for('static', filename='uploads/' + banner.image_path) }}" class="w-full h-full object-cover">
+                        <div class="absolute inset-0 bg-slate-900/60 flex flex-col justify-center items-center opacity-0 group-hover:opacity-100 transition-opacity p-6 text-center backdrop-blur-sm">
+                            <h3 class="text-white font-bold text-xl">{{ banner.heading }}</h3>
+                            <p class="text-slate-300 text-sm mt-2 line-clamp-2">{{ banner.subheading }}</p>
+                            <form action="/admin/banner/delete/{{ banner.id }}" method="POST" class="mt-4" onsubmit="return confirm('Delete this banner?');">
+                                <button type="submit" class="bg-red-500 text-white px-5 py-2 rounded-lg font-bold text-xs uppercase tracking-widest hover:bg-red-600 transition-colors shadow-lg">Delete</button>
+                            </form>
+                        </div>
+                    </div>
+                    {% else %}
+                    <div class="col-span-full p-12 text-center bg-slate-50 rounded-2xl border border-dashed border-slate-200">
+                        <p class="text-slate-400 text-sm italic">No active banners. Homepage will show a default fallback.</p>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+
+            <div x-show="activeTab === 'settings'" x-transition:enter="transition duration-300 transform" x-transition:enter-start="opacity-0 translate-y-4" x-cloak>
+                <div class="mb-10">
+                    <h1 class="text-3xl font-extrabold text-slate-900">Department Meta</h1>
+                    <p class="text-slate-500">Configure global info, leadership messages, and contacts.</p>
+                </div>
+
+                <form action="/admin/settings/update" method="POST" enctype="multipart/form-data" class="space-y-8 pb-20">
+                    
+                    <div class="bg-white p-8 rounded-3xl shadow-sm border border-slate-100">
+                        <h2 class="text-sm font-bold text-slate-800 mb-6 uppercase tracking-widest border-b border-slate-100 pb-3">Core Details</h2>
+                        <div class="space-y-6">
+                            <div>
+                                <label class="block text-xs font-bold text-slate-500 uppercase mb-2">About Department</label>
+                                <textarea name="about_text" rows="5" class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl outline-none focus:ring-2 focus:ring-blue-500 resize-none">{{ info.about_text }}</textarea>
+                            </div>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <div>
+                                    <label class="block text-xs font-bold text-slate-500 uppercase mb-2">Vision</label>
+                                    <textarea name="vision" rows="3" class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl outline-none focus:ring-2 focus:ring-blue-500 resize-none">{{ info.vision }}</textarea>
+                                </div>
+                                <div>
+                                    <label class="block text-xs font-bold text-slate-500 uppercase mb-2">Mission</label>
+                                    <textarea name="mission" rows="3" class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl outline-none focus:ring-2 focus:ring-blue-500 resize-none">{{ info.mission }}</textarea>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                        <div class="bg-white p-8 rounded-3xl shadow-sm border border-slate-100">
+                            <h2 class="text-sm font-bold text-indigo-600 mb-6 uppercase tracking-widest border-b border-slate-100 pb-3">Principal's Desk</h2>
+                            <div class="space-y-4">
+                                <div>
+                                    <label class="block text-xs font-bold text-slate-500 uppercase mb-2">Name</label>
+                                    <input type="text" name="principal_name" value="{{ info.principal_name or '' }}" class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl outline-none">
+                                </div>
+                                <div>
+                                    <label class="block text-xs font-bold text-slate-500 uppercase mb-2">Message</label>
+                                    <textarea name="principal_message" rows="4" class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl outline-none text-sm resize-none">{{ info.principal_message or '' }}</textarea>
+                                </div>
+                                <div class="pt-2">
+                                    <label class="block text-xs font-bold text-slate-500 uppercase mb-2">Update Photo</label>
+                                    <input type="file" name="principal_image" accept="image/*" class="w-full text-xs text-slate-500 file:bg-indigo-50 file:text-indigo-700 file:border-0 file:rounded-lg file:px-3 file:py-1.5 file:font-bold hover:file:bg-indigo-100 cursor-pointer">
+                                    {% if info.principal_image %}
+                                        <p class="text-[10px] text-green-600 font-bold mt-2 flex items-center"><svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg> Photo Configured</p>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="bg-white p-8 rounded-3xl shadow-sm border border-slate-100">
+                            <h2 class="text-sm font-bold text-blue-600 mb-6 uppercase tracking-widest border-b border-slate-100 pb-3">HOD's Desk</h2>
+                            <div class="space-y-4">
+                                <div>
+                                    <label class="block text-xs font-bold text-slate-500 uppercase mb-2">Name</label>
+                                    <input type="text" name="hod_name" value="{{ info.hod_name or '' }}" class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl outline-none">
+                                </div>
+                                <div>
+                                    <label class="block text-xs font-bold text-slate-500 uppercase mb-2">Message</label>
+                                    <textarea name="hod_message" rows="4" class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl outline-none text-sm resize-none">{{ info.hod_message or '' }}</textarea>
+                                </div>
+                                <div class="pt-2">
+                                    <label class="block text-xs font-bold text-slate-500 uppercase mb-2">Update Photo</label>
+                                    <input type="file" name="hod_image" accept="image/*" class="w-full text-xs text-slate-500 file:bg-blue-50 file:text-blue-700 file:border-0 file:rounded-lg file:px-3 file:py-1.5 file:font-bold hover:file:bg-blue-100 cursor-pointer">
+                                    {% if info.hod_image %}
+                                        <p class="text-[10px] text-green-600 font-bold mt-2 flex items-center"><svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg> Photo Configured</p>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="bg-white p-8 rounded-3xl shadow-sm border border-slate-100">
+                        <h2 class="text-sm font-bold text-slate-800 mb-6 uppercase tracking-widest border-b border-slate-100 pb-3">Contact Information</h2>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div>
+                                <label class="block text-xs font-bold text-slate-500 uppercase mb-2">Official Email</label>
+                                <input type="email" name="contact_email" value="{{ info.contact_email }}" class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl outline-none">
+                            </div>
+                            <div>
+                                <label class="block text-xs font-bold text-slate-500 uppercase mb-2">Office Phone</label>
+                                <input type="text" name="contact_phone" value="{{ info.contact_phone }}" class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl outline-none">
+                            </div>
+                            <div class="col-span-1 md:col-span-2">
+                                <label class="block text-xs font-bold text-slate-500 uppercase mb-2">Campus Address</label>
+                                <textarea name="address" rows="2" class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl outline-none resize-none">{{ info.address }}</textarea>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="sticky bottom-6 flex justify-end z-10">
+                        <button type="submit" class="bg-green-600 text-white px-10 py-4 rounded-2xl font-bold shadow-2xl shadow-green-600/30 hover:bg-green-700 hover:-translate-y-1 transition-all flex items-center">
+                            <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                            Save Settings
+                        </button>
+                    </div>
                 </form>
             </div>
+
         </div>
-        {% else %}
-        <p class="text-gray-500 italic">No active banners. Upload one to display on the homepage.</p>
-        {% endfor %}
-    </div>
+    </main>
 </div>
-        </main>
-    </div>
 
 </body>
 </html>
