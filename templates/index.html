@@ -18,7 +18,7 @@
          x-transition:leave-start="opacity-100"
          x-transition:leave-end="opacity-0">
          
-        <img src="{{ url_for('static', filename='uploads/' + banner.image_path) }}" alt="{{ banner.heading }}" class="w-full h-full object-cover" />
+        <img src="{{ url_for('uploaded_file', filename=banner.image_path) }}" alt="{{ banner.heading }}" class="w-full h-full object-cover" />
         <div class="absolute inset-0 bg-blue-900 bg-opacity-70 mix-blend-multiply"></div>
         <div class="absolute inset-0 bg-gradient-to-t from-gray-900 via-gray-900/40 to-transparent"></div>
         
@@ -129,7 +129,7 @@
                             <div class="mt-3 flex justify-between items-center text-xs text-gray-500">
                                 <span class="font-medium flex items-center"><svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>{{ notice.date_posted.strftime('%B %d, %Y') }}</span>
                                 {% if notice.pdf_file %}
-                                    <a href="{{ url_for('static', filename='uploads/' + notice.pdf_file) }}" target="_blank" class="text-blue-600 hover:text-blue-800 font-bold flex items-center">PDF <svg class="w-3 h-3 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg></a>
+                                    <a href="{{ url_for('uploaded_file', filename=notice.pdf_file) }}" target="_blank" class="text-blue-600 hover:text-blue-800 font-bold flex items-center">PDF <svg class="w-3 h-3 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg></a>
                                 {% endif %}
                             </div>
                         </li>

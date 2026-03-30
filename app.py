@@ -1,6 +1,6 @@
 import os
 from functools import wraps
-from flask import Flask, render_template, request, redirect, url_for, session, flash
+from flask import Flask, render_template, request, redirect, url_for, session, flash, send_from_directory
 from werkzeug.security import generate_password_hash, check_password_hash
 from models import db, Faculty, Course, Notice, Event, Student, Admin, DepartmentInfo, Gallery, HeroBanner
 from werkzeug.utils import secure_filename
@@ -8,13 +8,15 @@ from datetime import datetime
 
 app = Flask(__name__)
 
+DATA_DIR = os.getenv('DATA_DIR', os.path.abspath(os.path.dirname(__name__)))
 # --- Configuration ---
-app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('DATABASE_URL', 'sqlite:///cse_dept.db')
+db_path = os.path.join(DATA_DIR, 'cse_dept.db')
+app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('DATABASE_URL', f'sqlite:///{db_path}')
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 # REQUIRED FOR SESSIONS: Set a strong secret key in production (.env)
 app.config['SECRET_KEY'] = os.getenv('SECRET_KEY', 'fallback-secret-key-for-dev')
 
-UPLOAD_FOLDER = os.path.join('static', 'uploads')
+UPLOAD_FOLDER = os.path.join(DATA_DIR, 'uploads')
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif', 'webp', 'pdf'}
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
@@ -44,6 +46,11 @@ def login_required(f):
             return redirect(url_for('home'))
         return f(*args, **kwargs)
     return decorated_function
+
+
+@app.route('/uploads/<filename>')
+def uploaded_file(filename):
+    return send_from_directory(app.config['UPLOAD_FOLDER'], filename)
 
 # ==========================================
 #          ADMIN AUTH ROUTES
@@ -169,6 +176,7 @@ def add_notice():
     content = request.form.get('content')
     is_highlight = request.form.get('is_highlight') == 'on'
     
+    posted_date_str = request.form.get('posted_date')
     # Handle the PDF upload
     pdf_filename = None
     file = request.files.get('pdf_file')
@@ -178,6 +186,8 @@ def add_notice():
     
     if title and content:
         new_notice = Notice(title=title, content=content, is_highlight=is_highlight, pdf_file=pdf_filename)
+        if posted_date_str:
+            new_notice.date_posted = datetime.strptime(posted_date_str, '%Y-%m-%d')
         db.session.add(new_notice)
         db.session.commit()
         

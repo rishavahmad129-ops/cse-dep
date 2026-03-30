@@ -164,10 +164,16 @@
                 <div class="bg-white p-8 rounded-2xl shadow-sm border border-slate-100 mb-10">
                     <h2 class="text-lg font-bold text-slate-900 mb-6">Create New Notice</h2>
                     <form action="/admin/notice/add" method="POST" enctype="multipart/form-data" class="space-y-6">
-                        <div>
-                            <label class="block text-xs font-bold text-slate-500 uppercase mb-2">Title</label>
-                            <input type="text" name="title" required class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none">
-                        </div>
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+    <div class="md:col-span-2">
+        <label class="block text-xs font-bold text-slate-500 uppercase mb-2">Title</label>
+        <input type="text" name="title" required class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none">
+    </div>
+    <div>
+        <label class="block text-xs font-bold text-slate-500 uppercase mb-2">Post Date</label>
+        <input type="date" name="posted_date" required class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none text-sm">
+    </div>
+</div>
                         <div>
                             <label class="block text-xs font-bold text-slate-500 uppercase mb-2">Content</label>
                             <textarea name="content" rows="3" required class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none resize-none"></textarea>
@@ -301,7 +307,7 @@
                                 <td class="px-6 py-4 flex items-center gap-4">
                                     <div class="w-10 h-10 rounded-full bg-blue-100 border border-slate-200 flex items-center justify-center font-bold text-blue-600 uppercase text-xs overflow-hidden shrink-0">
                                         {% if member.image_path %}
-                                            <img src="{{ url_for('static', filename='uploads/' + member.image_path) }}" class="w-full h-full object-cover">
+                                            <img src="{{ url_for('uploaded_file', filename=member.image_path) }}" class="w-full h-full object-cover">
                                         {% else %}
                                             {{ member.name[0] }}
                                         {% endif %}
@@ -562,7 +568,7 @@
                     {% for item in gallery_items %}
                     <div class="bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden group relative">
                         {% if item.media_type == 'image' %}
-                            <img src="{{ url_for('static', filename='uploads/' + item.file_path) }}" class="w-full aspect-video object-cover">
+                            <img src="{{ url_for('uploaded_file', filename=item.file_path) }}" class="w-full aspect-video object-cover">
                         {% elif item.media_type == 'video' %}
                             <iframe class="w-full aspect-video" src="{{ item.file_path }}" frameborder="0" allowfullscreen></iframe>
                         {% endif %}
@@ -611,7 +617,7 @@
                 <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
                     {% for banner in banners %}
                     <div class="bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden relative group aspect-video">
-                        <img src="{{ url_for('static', filename='uploads/' + banner.image_path) }}" class="w-full h-full object-cover">
+                        <img src="{{ url_for('uploaded_file', filename=banner.image_path) }}" class="w-full h-full object-cover">
                         <div class="absolute inset-0 bg-slate-900/60 flex flex-col justify-center items-center opacity-0 group-hover:opacity-100 transition-opacity p-6 text-center backdrop-blur-sm">
                             <h3 class="text-white font-bold text-xl">{{ banner.heading }}</h3>
                             <p class="text-slate-300 text-sm mt-2 line-clamp-2">{{ banner.subheading }}</p>
